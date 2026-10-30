@@ -1,0 +1,33 @@
+package-as: Hg_Unit_Frames
+
+manual-changelog:
+    filename: Hg_Rebirth/changelog.md
+    markup-type: markdown
+
+enable-nolib-creation: no
+
+move-folders:
+    Hg_Rebirth/Hg_Rebirth: Hg_Rebirth
+    Hg_Rebirth/Hg_Rebirth_Aura: Hg_Rebirth_Aura
+    Hg_Rebirth/Hg_Rebirth_Castbars: Hg_Rebirth_Castbars
+    Hg_Rebirth/Hg_Rebirth_Focus: Hg_Rebirth_Focus
+    Hg_Rebirth/Hg_Rebirth_Focus_Aura: Hg_Rebirth_Focus_Aura
+    Hg_Rebirth/Hg_Rebirth_Focus_Target: Hg_Rebirth_Focus_Target
+    Hg_Rebirth/Hg_Rebirth_Party: Hg_Rebirth_Party
+    Hg_Rebirth/Hg_Rebirth_Party_Pet: Hg_Rebirth_Party_Pet
+    Hg_Rebirth/Hg_Rebirth_Party_Target: Hg_Rebirth_Party_Target
+    Hg_Rebirth/Hg_Rebirth_Player: Hg_Rebirth_Player
+    Hg_Rebirth/Hg_Rebirth_Player_Aura: Hg_Rebirth_Player_Aura
+    Hg_Rebirth/Hg_Rebirth_Player_Pet: Hg_Rebirth_Player_Pet
+    Hg_Rebirth/Hg_Rebirth_Target: Hg_Rebirth_Target
+    Hg_Rebirth/Hg_Rebirth_Target_Aura: Hg_Rebirth_Target_Aura
+    Hg_Rebirth/Hg_Rebirth_Target_Target: Hg_Rebirth_Target_Target
+
+ignore:
+    - Tests
+    - "inv_babymurlo3frost.jpg"
+
+embedded-libraries:
+    - LibStub
+    - CallbackHandler-1.0
+    - LibDataBroker-1.1

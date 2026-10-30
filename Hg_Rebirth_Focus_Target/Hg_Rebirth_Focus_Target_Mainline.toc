@@ -1,0 +1,24 @@
+## Interface: 120105, 16001
+## Title: Hg Unit Frames - Focus Target
+## Notes: Focus target unit frame for Hg Unit Frames.
+## Author: mZHg
+## Version: @project-version@
+## Category: Unit Frames
+## Category-deDE: Einheitenfenster
+## Category-esES: Marcos de unidades
+## Category-esMX: Marcos de unidades
+## Category-frFR: Portraits d'unités
+## Category-itIT: Riquadri delle unità
+## Category-koKR: 유닛프레임
+## Category-ptBR: Quadros de unidade
+## Category-ruRU: Рамки юнитов
+## Category-zhCN: 单位框体
+## Category-zhTW: 單位框架
+## IconTexture: Interface\Icons\Inv_babymurlo3frost
+## X-Icon: Interface\Icons\Inv_babymurlo3frost
+## Group: Hg_Rebirth
+## Dependencies: Hg_Rebirth
+
+FocusTarget.lua
+Stock.lua
+Config.lua
