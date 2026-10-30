@@ -7,7 +7,7 @@ Designed for **Retail and Forever**. Classic clients will never be not supported
 
 **Hg Unit Frames** is still in **Beta**!
 
-Please report any bug or request any feature [here](https://github.com/HgAlexx/hg-unit-frames/issues) :)
+Please report any bug or request any feature [here](https://github.com/HgAlexx/Hg-Unit-Frames/issues) :)
 
 ---
 
