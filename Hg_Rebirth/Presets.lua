@@ -27,8 +27,8 @@ ns.presets = {
             barValues = false, -- Always show values in healer mode
             className = false, -- Class-colored name
             classResource = true, -- Show class resource frame
-            resourceColor = { 0.75, 0, 0 },
-            resourceOnTop = false,
+            resourceColor = { 0.75, 0, 0 }, -- Class resource color
+            resourceOnTop = false, -- Show class resource bar at top of name frame
             combatText = false, -- Portrait combat text
             compact = false, -- Compact mode
             compactPercent = false, -- Show percentages in compact mode
@@ -53,10 +53,10 @@ ns.presets = {
             y = -43, -- Frame position Y (drag or nudge buttons)
         },
         PlayerPet = {
-            petClassName = false,
-            petFriendlyHealth = true,
+            petClassName = false, -- Class-colored name
+            petFriendlyHealth = true, -- Show numerical health
             auraSpacingHorizontal = 5, -- Horizontal spacing
-            auraSpacingVertical = 3,
+            auraSpacingVertical = 3, -- Vertical spacing
             buffCount = 16, -- Buff count
             buffLocation = 4, -- Buff location (1-7, see dropdown order)
             buffSize = 12, -- Buff size
@@ -76,8 +76,8 @@ ns.presets = {
             scale = 1, -- Pet scale (%)
             showName = true, -- Show pet name and level
             showTarget = false, -- Show pet's target
-            targetCompact = false,
-            showHappiness = false,
+            targetCompact = false, -- Compact mode
+            showHappiness = false, -- Show pet happiness
             showXP = false, -- Show pet experience (Hunter only)
             targetScale = 1, -- Pet-target scale (%)
             targetX = 198, -- Pet-target position X (drag or nudge buttons)
@@ -86,8 +86,8 @@ ns.presets = {
             y = -117, -- Pet position Y (drag or nudge buttons)
         },
         PlayerAura = {
-            showAuraBackground = false,
-            auraBackgroundAlpha = 1,
+            showAuraBackground = false, -- Show aura backgrounds
+            auraBackgroundAlpha = 1, -- Aura background opacity (%)
             anchorLocation = 1, -- Aura anchor (1 = Bottom left, 2 = Bottom right, 3 = Top left, 4 = Top right)
             auraTimers = false, -- Show aura native cooldown
             buffPerRow = 10, -- Auras per row
@@ -104,13 +104,13 @@ ns.presets = {
             showBlizzard = false, -- Show native player auras
             spacingHorizontal = 1, -- Horizontal spacing
             spacingVertical = 1, -- Vertical spacing
-            groupSpacingVertical = 3,
+            groupSpacingVertical = 3, -- Buff/debuff gap
             weaponBuff = true, -- Show weapon enchants
         },
         TargetAura = {
             ownDebuffs = false, -- Only show own debuffs on hostile targets
-            showAuraBackground = true,
-            auraBackgroundAlpha = 1,
+            showAuraBackground = true, -- Show aura backgrounds
+            auraBackgroundAlpha = 1, -- Aura background opacity (%)
             anchorLocation = 1, -- Aura anchor (1 = Bottom left, 2 = Bottom right, 3 = Top left, 4 = Top right)
             auraTimers = true, -- Show aura native cooldown
             buffPerRow = 10, -- Auras per row
@@ -126,7 +126,7 @@ ns.presets = {
             secondsMode = 0, -- Duration seconds (0 = Whole minutes, 1 = Always show seconds, 2 = Show seconds below 10 minutes)
             spacingHorizontal = 1, -- Horizontal spacing
             spacingVertical = 1, -- Vertical spacing
-            groupSpacingVertical = 1,
+            groupSpacingVertical = 1, -- Buff/debuff gap
         },
         Target = {
             classIcon = true, -- Show class icon
@@ -158,7 +158,7 @@ ns.presets = {
         TargetTarget = {
             auraSpacingHorizontal = 0.5, -- Horizontal spacing
             auraSpacingVertical = 1, -- Vertical spacing
-            groupSpacingVertical = 1,
+            groupSpacingVertical = 1, -- Buff/debuff gap
             buffs = false, -- Show target-of-target buffs
             castableBuffs = false, -- Only show castable buffs
             className = false, -- Class-colored name
@@ -179,17 +179,17 @@ ns.presets = {
             warningMode = "off", -- Warning mode: "off", "dps", "tank" or "healer"
             warningSize = "small", -- Warning text: "small", "large" or "hidden"
             warningSound = false, -- Play target-chain warning sound
-            warningSoundKit = "9379",
-            warningSolo = true,
-            warningGroup = true,
-            warningRaid = true,
+            warningSoundKit = "9379", -- Warning sound
+            warningSolo = true, -- Solo
+            warningGroup = true, -- In group
+            warningRaid = true, -- In raid
             x = 517, -- Target-of-target position X (drag or nudge buttons)
             y = -43, -- Target-of-target position Y (drag or nudge buttons)
         },
         FocusAura = {
             ownDebuffs = false, -- Only show own debuffs on hostile targets
-            showAuraBackground = true,
-            auraBackgroundAlpha = 1,
+            showAuraBackground = true, -- Show aura backgrounds
+            auraBackgroundAlpha = 1, -- Aura background opacity (%)
             anchorLocation = 1, -- Aura anchor (1 = Bottom left, 2 = Bottom right, 3 = Top left, 4 = Top right)
             auraTimers = true, -- Show aura native cooldown
             buffPerRow = 10, -- Auras per row
@@ -205,7 +205,7 @@ ns.presets = {
             secondsMode = 2, -- Duration seconds (0 = Whole minutes, 1 = Always show seconds, 2 = Show seconds below 10 minutes)
             spacingHorizontal = 1, -- Horizontal spacing
             spacingVertical = 1, -- Vertical spacing
-            groupSpacingVertical = 3,
+            groupSpacingVertical = 3, -- Buff/debuff gap
         },
         Focus = {
             classIcon = true, -- Show class icon
@@ -325,7 +325,9 @@ ns.presets = {
             y4 = -499, -- Party 4 pet position Y (drag or nudge buttons)
         },
         CastBar = {
-            castColor = { 1, 0.7, 0 }, channelColor = { 0, 1, 0 }, uninterruptibleColor = { 0.5, 0.5, 0.5 },
+            castColor = { 1, 0.7, 0 }, -- Cast color
+            channelColor = { 0, 1, 0 }, -- Channel color
+            uninterruptibleColor = { 0.5, 0.5, 0.5 }, -- Uninterruptible color
             focusEnabled = true, -- Focus: Enable embedded cast bar
             focusLeftTimer = true, -- Focus: Place cast timer on the left
             focusReplaceName = false, -- Focus: Replace unit name with spell name
@@ -367,8 +369,8 @@ ns.presets = {
                 barValues = false, -- Always show values in healer mode
                 className = true, -- Class-colored name
                 classResource = true, -- Show class resource frame
-                resourceColor = { 0.75, 0, 0 },
-                resourceOnTop = false,
+                resourceColor = { 0.75, 0, 0 }, -- Class resource color
+                resourceOnTop = false, -- Show class resource bar at top of name frame
                 combatText = false, -- Portrait combat text
                 compact = true, -- Compact mode
                 compactPercent = true, -- Show percentages in compact mode
@@ -403,10 +405,10 @@ ns.presets = {
                 stickyScale = false,
             },
             PlayerPet = {
-                petClassName = true,
-                petFriendlyHealth = true,
+                petClassName = true, -- Class-colored name
+                petFriendlyHealth = true, -- Show numerical health
                 auraSpacingHorizontal = 0, -- Horizontal spacing
-                auraSpacingVertical = 4.5,
+                auraSpacingVertical = 4.5, -- Vertical spacing
                 buffCount = 16, -- Buff count
                 buffLocation = 6, -- Buff location (1-7, see dropdown order)
                 buffSize = 13, -- Buff size
@@ -426,8 +428,8 @@ ns.presets = {
                 scale = 0.75, -- Pet scale (%)
                 showName = true, -- Show pet name and level
                 showTarget = true, -- Show pet's target
-                targetCompact = true,
-                showHappiness = true,
+                targetCompact = true, -- Compact mode
+                showHappiness = true, -- Show pet happiness
                 showXP = false, -- Show pet experience (Hunter only)
                 targetScale = 0.75, -- Pet-target scale (%)
                 targetX = 532.9750956748655, -- Pet-target position X (drag or nudge buttons)
@@ -456,8 +458,8 @@ ns.presets = {
                 targetStickyScale = true,
             },
             PlayerAura = {
-                showAuraBackground = false,
-                auraBackgroundAlpha = 0.75,
+                showAuraBackground = false, -- Show aura backgrounds
+                auraBackgroundAlpha = 0.75, -- Aura background opacity (%)
                 anchorLocation = 1, -- Aura anchor (1 = Bottom left, 2 = Bottom right, 3 = Top left, 4 = Top right)
                 auraTimers = false, -- Show aura native cooldown
                 buffPerRow = 10, -- Auras per row
@@ -474,13 +476,13 @@ ns.presets = {
                 showBlizzard = false, -- Show native player auras
                 spacingHorizontal = 1, -- Horizontal spacing
                 spacingVertical = 1, -- Vertical spacing
-                groupSpacingVertical = 5,
+                groupSpacingVertical = 5, -- Buff/debuff gap
                 weaponBuff = true, -- Show weapon enchants
             },
             TargetAura = {
                 ownDebuffs = false, -- Only show own debuffs on hostile targets
-                showAuraBackground = false,
-                auraBackgroundAlpha = 1,
+                showAuraBackground = false, -- Show aura backgrounds
+                auraBackgroundAlpha = 1, -- Aura background opacity (%)
                 anchorLocation = 1, -- Aura anchor (1 = Bottom left, 2 = Bottom right, 3 = Top left, 4 = Top right)
                 auraTimers = true, -- Show aura native cooldown
                 buffPerRow = 10, -- Auras per row
@@ -496,7 +498,7 @@ ns.presets = {
                 secondsMode = 2, -- Duration seconds (0 = Whole minutes, 1 = Always show seconds, 2 = Show seconds below 10 minutes)
                 spacingHorizontal = 1, -- Horizontal spacing
                 spacingVertical = 1, -- Vertical spacing
-                groupSpacingVertical = 1,
+                groupSpacingVertical = 1, -- Buff/debuff gap
             },
             Target = {
                 classIcon = true, -- Show class icon
@@ -538,7 +540,7 @@ ns.presets = {
             TargetTarget = {
                 auraSpacingHorizontal = 0.5, -- Horizontal spacing
                 auraSpacingVertical = 1, -- Vertical spacing
-                groupSpacingVertical = 5,
+                groupSpacingVertical = 5, -- Buff/debuff gap
                 buffs = true, -- Show target-of-target buffs
                 castableBuffs = false, -- Only show castable buffs
                 className = true, -- Class-colored name
@@ -559,10 +561,10 @@ ns.presets = {
                 warningMode = "off", -- Warning mode: "off", "dps", "tank" or "healer"
                 warningSize = "small", -- Warning text: "small", "large" or "hidden"
                 warningSound = false, -- Play target-chain warning sound
-                warningSoundKit = "9373",
-                warningSolo = true,
-                warningGroup = true,
-                warningRaid = true,
+                warningSoundKit = "9373", -- Warning sound
+                warningSolo = true, -- Solo
+                warningGroup = true, -- In group
+                warningRaid = true, -- In raid
                 x = 1062.252002389595, -- Target-of-target position X (drag or nudge buttons)
                 y = -666.5422943077349, -- Target-of-target position Y (drag or nudge buttons)
                 sticky1ChildX = 0,
@@ -589,8 +591,8 @@ ns.presets = {
             },
             FocusAura = {
                 ownDebuffs = false, -- Only show own debuffs on hostile targets
-                showAuraBackground = false,
-                auraBackgroundAlpha = 1,
+                showAuraBackground = false, -- Show aura backgrounds
+                auraBackgroundAlpha = 1, -- Aura background opacity (%)
                 anchorLocation = 1, -- Aura anchor (1 = Bottom left, 2 = Bottom right, 3 = Top left, 4 = Top right)
                 auraTimers = true, -- Show aura native cooldown
                 buffPerRow = 10, -- Auras per row
@@ -606,7 +608,7 @@ ns.presets = {
                 secondsMode = 2, -- Duration seconds (0 = Whole minutes, 1 = Always show seconds, 2 = Show seconds below 10 minutes)
                 spacingHorizontal = 1, -- Horizontal spacing
                 spacingVertical = 1, -- Vertical spacing
-                groupSpacingVertical = 3,
+                groupSpacingVertical = 3, -- Buff/debuff gap
             },
             Focus = {
                 classIcon = true, -- Show class icon
@@ -734,7 +736,7 @@ ns.presets = {
             FocusTarget = {
                 auraSpacingHorizontal = 1, -- Horizontal spacing
                 auraSpacingVertical = 1, -- Vertical spacing
-                groupSpacingVertical = 3,
+                groupSpacingVertical = 3, -- Buff/debuff gap
                 buffs = true, -- Show focus-target buffs
                 castableBuffs = false, -- Only show castable buffs
                 className = true, -- Class-colored name
@@ -818,7 +820,9 @@ ns.presets = {
                 stickyScale = true,
             },
             CastBar = {
-                castColor = { 1, 0.7, 0 }, channelColor = { 0, 1, 0 }, uninterruptibleColor = { 0.5, 0.5, 0.5 },
+                castColor = { 1, 0.7, 0 }, -- Cast color
+                channelColor = { 0, 1, 0 }, -- Channel color
+                uninterruptibleColor = { 0.5, 0.5, 0.5 }, -- Uninterruptible color
                 focusEnabled = true, -- Focus: Enable embedded cast bar
                 focusLeftTimer = true, -- Focus: Place cast timer on the left
                 focusReplaceName = true, -- Focus: Replace unit name with spell name

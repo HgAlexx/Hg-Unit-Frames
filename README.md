@@ -11,7 +11,7 @@ Please report any bug or request any feature [here](https://github.com/HgAlexx/H
 
 ---
 
-**Features**
+**Features**: some old, some new
 
 - Familiar Perl-style unit frames, with compact layouts and customizable health and power text.
 - Adjustable frame positions, scales, portraits, colors and visibility.
@@ -21,9 +21,11 @@ Please report any bug or request any feature [here](https://github.com/HgAlexx/H
 - Optional automatic preset switching for solo play, groups and different instance types.
 - Modular design: enable only the displays you want.
 
+*Note*: Not all features could be ported to Mainline API. 
+
 ---
 
-**Supported unit frames & display**
+**Supported unit frames & displays**
 
 - **Player**: Your health, power and class resources, with experience or watched reputation.
 - **Player Aura**: Configurable player buffs, debuffs and weapon enchants.

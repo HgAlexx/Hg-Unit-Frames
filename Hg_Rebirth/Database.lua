@@ -1,10 +1,5 @@
 local _, ns = ...
 
-local visibilityAliases = {
-    hideLevel = "showLevel", hideName = "showName", hidePower = "showPower",
-    hideInRaid = "showInRaid", hideOriginal = "showOriginal",
-}
-
 function ns.Copy(value)
     if type(value) ~= "table" then return value end
     local result = {}
@@ -17,13 +12,6 @@ local function validate(input, defaults, ranges, changedKey, changedValue)
     local result = ns.Copy(input)
     if changedKey then result[changedKey] = changedValue end
     if ns.modules.Core and defaults == ns.modules.Core.defaults then result.fadeBars = nil end
-    for oldKey, newKey in pairs(visibilityAliases) do
-        if defaults[newKey] ~= nil and result[oldKey] ~= nil then
-            if type(result[oldKey]) ~= "boolean" then return nil, "Invalid setting: " .. oldKey end
-            if result[newKey] == nil then result[newKey] = not result[oldKey] end
-            result[oldKey] = nil
-        end
-    end
     for key, default in pairs(defaults) do
         local value = result[key]
         local range = ranges and ranges[key]
