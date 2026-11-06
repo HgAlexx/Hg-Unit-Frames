@@ -2,6 +2,7 @@ local ns = Hg_Rebirth
 local FocusTarget = {
     savedVariable = "Hg_Rebirth_Focus_Target_Options",
     defaults = {
+        showTooltip = true, tooltipAnchor = "default",
         enabled = true, showInRaid = true, locked = true, showPower = true,
         className = true, scale = 1, opacity = 1, x = 593.6735229492173, y = -656.085956960502,
         buffs = false, debuffs = false, castableBuffs = false, curableDebuffs = false, ownDebuffs = false,
@@ -19,6 +20,7 @@ local FocusTarget = {
         sticky1ParentX = 1,
     },
     ranges = {
+        tooltipAnchor = { right = true, default = true },
         scale = { 0.01, 1.49 }, opacity = { 0, 1 },
         auraSpacingHorizontal = { -10, 30 }, auraSpacingVertical = { -10, 30 },
         groupSpacingVertical = { 0, 100 },

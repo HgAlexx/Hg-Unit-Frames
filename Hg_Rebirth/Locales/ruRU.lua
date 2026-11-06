@@ -1,6 +1,11 @@
 local _, ns = ...
 local L = ns.NewLocale("ruRU")
 if not L then return end
+L["Tooltip"] = "Подсказка"
+L["Show unit tooltip"] = "Показывать подсказку существа"
+L["Tooltip anchor"] = "Положение подсказки"
+L["Right of frame"] = "Справа от рамки"
+L["WoW default"] = "Стандартное положение WoW"
 L["Sticky mode"] = "Режим привязки"
 L["Move with parent"] = "Перемещать с родительской рамкой"
 L["Scale with parent"] = "Использовать масштаб родительской рамки"
@@ -100,6 +105,7 @@ L["Nudge down 1 pixel"] = "Сдвинуть вниз на 1 пиксель"
 L["Nudge left 1 pixel"] = "Сдвинуть влево на 1 пиксель"
 L["Nudge right 1 pixel"] = "Сдвинуть вправо на 1 пиксель"
 L["Cannot nudge frames during combat."] = "Нельзя сдвигать рамки в бою."
+L["Cannot open settings during combat."] = "Нельзя открыть настройки в бою."
 L["Frame positioning requires initialized custom frames."] = "Для размещения нужны инициализированные пользовательские рамки."
 L["Frame positioning geometry unavailable."] = "Геометрия размещения рамок недоступна."
 L["Align right of Player"] = "Выровнять справа от игрока"

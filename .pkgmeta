@@ -28,6 +28,8 @@ ignore:
     - "inv_babymurlo3frost.jpg"
 
 embedded-libraries:
-    - LibStub
-    - CallbackHandler-1.0
-    - LibDataBroker-1.1
+    - libstub
+    - callbackhandler-1.0
+
+tools-used:
+    - libdatabroker-1.1

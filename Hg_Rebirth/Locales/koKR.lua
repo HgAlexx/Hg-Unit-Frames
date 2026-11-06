@@ -1,6 +1,11 @@
 local _, ns = ...
 local L = ns.NewLocale("koKR")
 if not L then return end
+L["Tooltip"] = "툴팁"
+L["Show unit tooltip"] = "유닛 툴팁 표시"
+L["Tooltip anchor"] = "툴팁 위치"
+L["Right of frame"] = "프레임 오른쪽"
+L["WoW default"] = "WoW 기본 위치"
 L["Sticky mode"] = "프레임 연결 모드"
 L["Move with parent"] = "부모 프레임과 함께 이동"
 L["Scale with parent"] = "부모 프레임 크기 비율 사용"
@@ -100,6 +105,7 @@ L["Nudge down 1 pixel"] = "아래로 1픽셀 이동"
 L["Nudge left 1 pixel"] = "왼쪽으로 1픽셀 이동"
 L["Nudge right 1 pixel"] = "오른쪽으로 1픽셀 이동"
 L["Cannot nudge frames during combat."] = "전투 중에는 프레임을 이동할 수 없습니다."
+L["Cannot open settings during combat."] = "전투 중에는 설정을 열 수 없습니다."
 L["Frame positioning requires initialized custom frames."] = "이동하려면 사용자 프레임이 초기화되어야 합니다."
 L["Frame positioning geometry unavailable."] = "프레임 위치 정보를 사용할 수 없습니다."
 L["Align right of Player"] = "플레이어 오른쪽에 정렬"

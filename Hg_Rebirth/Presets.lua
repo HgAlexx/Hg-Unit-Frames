@@ -23,6 +23,8 @@ ns.presets = {
             transparentBackground = false, -- Transparent frame backgrounds
         },
         Player = {
+            showTooltip = true, -- Show unit tooltip
+            tooltipAnchor = "default", -- Tooltip anchor: "right" or "default"
             alternateMana = true, -- Show alternate mana bar
             barValues = false, -- Always show values in healer mode
             className = false, -- Class-colored name
@@ -129,6 +131,8 @@ ns.presets = {
             groupSpacingVertical = 1, -- Buff/debuff gap
         },
         Target = {
+            showTooltip = true, -- Show unit tooltip
+            tooltipAnchor = "default", -- Tooltip anchor: "right" or "default"
             classIcon = true, -- Show class icon
             className = false, -- Class-colored name
             classPanel = true, -- Show class or creature type
@@ -156,6 +160,8 @@ ns.presets = {
             y = -43, -- Frame position Y (drag or nudge buttons)
         },
         TargetTarget = {
+            showTooltip = true, -- Show unit tooltip
+            tooltipAnchor = "default", -- Tooltip anchor: "right" or "default"
             auraSpacingHorizontal = 0.5, -- Horizontal spacing
             auraSpacingVertical = 1, -- Vertical spacing
             groupSpacingVertical = 1, -- Buff/debuff gap
@@ -208,6 +214,8 @@ ns.presets = {
             groupSpacingVertical = 3, -- Buff/debuff gap
         },
         Focus = {
+            showTooltip = true, -- Show unit tooltip
+            tooltipAnchor = "default", -- Tooltip anchor: "right" or "default"
             classIcon = true, -- Show class icon
             className = false, -- Class-colored name
             classPanel = true, -- Show class or creature type
@@ -229,6 +237,8 @@ ns.presets = {
             y = -650, -- Frame position Y (drag or nudge buttons)
         },
         Party = {
+            showTooltip = true, -- Show unit tooltip
+            tooltipAnchor = "default", -- Tooltip anchor: "right" or "default"
             auraSpacingHorizontal = 5, -- Horizontal spacing
             auraTimers = false, -- Show aura native cooldown
             buffCount = 16, -- Buff count
@@ -263,6 +273,8 @@ ns.presets = {
             y = -187, -- Frame position Y (drag or nudge buttons)
         },
         PartyTarget = {
+            showTooltip = true, -- Show unit tooltip
+            tooltipAnchor = "default", -- Tooltip anchor: "right" or "default"
             className = false, -- Class-colored name
             enabled = true, -- Show party targets
             locked = false, -- Lock frame position
@@ -280,6 +292,8 @@ ns.presets = {
             y4 = -499, -- Party 4 target position Y (drag or nudge buttons)
         },
         FocusTarget = {
+            showTooltip = true, -- Show unit tooltip
+            tooltipAnchor = "default", -- Tooltip anchor: "right" or "default"
             auraSpacingHorizontal = 0.5, -- Horizontal spacing
             auraSpacingVertical = 1, -- Vertical spacing
             groupSpacingVertical = 1,
@@ -365,6 +379,8 @@ ns.presets = {
                 transparentBackground = false, -- Transparent frame backgrounds
             },
             Player = {
+                showTooltip = true, -- Show unit tooltip
+                tooltipAnchor = "default", -- Tooltip anchor: "right" or "default"
                 alternateMana = false, -- Show alternate mana bar
                 barValues = false, -- Always show values in healer mode
                 className = true, -- Class-colored name
@@ -374,7 +390,7 @@ ns.presets = {
                 combatText = false, -- Portrait combat text
                 compact = true, -- Compact mode
                 compactPercent = true, -- Show percentages in compact mode
-                fiveSecondRule = false, -- Show five-second mana rule (Forever only)
+                fiveSecondRule = true, -- Show five-second mana rule (Forever only)
                 groupInName = false, -- Show raid group in name (in raid)
                 healer = false, -- Healer mode: show health deficit
                 locked = true, -- Lock frame position
@@ -501,6 +517,8 @@ ns.presets = {
                 groupSpacingVertical = 1, -- Buff/debuff gap
             },
             Target = {
+                showTooltip = true, -- Show unit tooltip
+                tooltipAnchor = "default", -- Tooltip anchor: "right" or "default"
                 classIcon = true, -- Show class icon
                 className = true, -- Class-colored name
                 classPanel = true, -- Show class or creature type
@@ -538,6 +556,8 @@ ns.presets = {
                 stickyScale = true,
             },
             TargetTarget = {
+                showTooltip = true, -- Show unit tooltip
+                tooltipAnchor = "default", -- Tooltip anchor: "right" or "default"
                 auraSpacingHorizontal = 0.5, -- Horizontal spacing
                 auraSpacingVertical = 1, -- Vertical spacing
                 groupSpacingVertical = 5, -- Buff/debuff gap
@@ -611,6 +631,8 @@ ns.presets = {
                 groupSpacingVertical = 3, -- Buff/debuff gap
             },
             Focus = {
+                showTooltip = true, -- Show unit tooltip
+                tooltipAnchor = "default", -- Tooltip anchor: "right" or "default"
                 classIcon = true, -- Show class icon
                 className = true, -- Class-colored name
                 classPanel = true, -- Show class or creature type
@@ -642,6 +664,8 @@ ns.presets = {
                 stickyScale = false,
             },
             Party = {
+                showTooltip = true, -- Show unit tooltip
+                tooltipAnchor = "default", -- Tooltip anchor: "right" or "default"
                 auraSpacingHorizontal = 2, -- Horizontal spacing
                 auraTimers = true, -- Show aura native cooldown
                 buffCount = 16, -- Buff count
@@ -686,6 +710,8 @@ ns.presets = {
                 stickyScale = false,
             },
             PartyTarget = {
+                showTooltip = true, -- Show unit tooltip
+                tooltipAnchor = "default", -- Tooltip anchor: "right" or "default"
                 className = true, -- Class-colored name
                 enabled = true, -- Show party targets
                 locked = true, -- Lock frame position
@@ -734,6 +760,8 @@ ns.presets = {
                 stickyScale = true,
             },
             FocusTarget = {
+                showTooltip = true, -- Show unit tooltip
+                tooltipAnchor = "default", -- Tooltip anchor: "right" or "default"
                 auraSpacingHorizontal = 1, -- Horizontal spacing
                 auraSpacingVertical = 1, -- Vertical spacing
                 groupSpacingVertical = 3, -- Buff/debuff gap

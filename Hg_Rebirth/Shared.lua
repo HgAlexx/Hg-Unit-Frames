@@ -389,6 +389,20 @@ function ns.SavePosition(owner, frame, xKey, yKey)
     if ns.ApplySticky then ns.ApplySticky() end
 end
 
+function ns.AnchorUnitTooltip(owner, button)
+    if GameTooltip:IsForbidden() or not owner.db.showTooltip then return false end
+    if owner.db.tooltipAnchor == "default" then
+        GameTooltip_SetDefaultAnchor(GameTooltip, button)
+    else
+        GameTooltip:SetOwner(button, "ANCHOR_RIGHT")
+    end
+    return true
+end
+
+function ns.HideUnitTooltip()
+    if not GameTooltip:IsForbidden() then GameTooltip:Hide() end
+end
+
 function ns.UnitOverlay(owner, parent, root, unit, xKey, yKey)
     local button = CreateFrame("Button", nil, parent, "SecureUnitButtonTemplate")
     button:SetAllPoints(parent)
@@ -399,6 +413,14 @@ function ns.UnitOverlay(owner, parent, root, unit, xKey, yKey)
     button:SetAttribute("unit", unit)
     button:SetAttribute("*type1", "target")
     button:SetAttribute("*type2", "togglemenu")
+    if owner.defaults.showTooltip ~= nil then
+        button:SetScript("OnEnter", function()
+            if not ns.AnchorUnitTooltip(owner, button) then return end
+            GameTooltip:SetUnit(unit == "player" and (owner.unit or unit) or unit)
+            GameTooltip:Show()
+        end)
+        button:SetScript("OnLeave", ns.HideUnitTooltip)
+    end
     button:SetScript("OnDragStart", function()
         if not InCombatLockdown() and (ns.positioning or not owner.db.locked) then
             root:StartMoving()

@@ -1,6 +1,11 @@
 local _, ns = ...
 local L = ns.NewLocale("zhTW")
 if not L then return end
+L["Tooltip"] = "滑鼠提示"
+L["Show unit tooltip"] = "顯示單位滑鼠提示"
+L["Tooltip anchor"] = "滑鼠提示錨點"
+L["Right of frame"] = "框架右側"
+L["WoW default"] = "WoW 預設位置"
 L["Sticky mode"] = "框架吸附"
 L["Move with parent"] = "隨父框架移動"
 L["Scale with parent"] = "使用父框架縮放"
@@ -100,6 +105,7 @@ L["Nudge down 1 pixel"] = "向下移動1像素"
 L["Nudge left 1 pixel"] = "向左移動1像素"
 L["Nudge right 1 pixel"] = "向右移動1像素"
 L["Cannot nudge frames during combat."] = "戰鬥中無法移動框架。"
+L["Cannot open settings during combat."] = "戰鬥中無法開啟設定。"
 L["Frame positioning requires initialized custom frames."] = "移動框架需要已初始化的自訂框架。"
 L["Frame positioning geometry unavailable."] = "框架定位資訊無法使用。"
 L["Align right of Player"] = "對齊到玩家右側"

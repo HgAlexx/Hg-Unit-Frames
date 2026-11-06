@@ -1,10 +1,9 @@
 local addonName, ns = ...
-local _, _, _, interfaceVersion = GetBuildInfo()
 
 ns.name = addonName
 ns.title = "Hg Unit Frames"
-ns.IsRetail = interfaceVersion > 120000
-ns.IsForever = not ns.IsRetail
+ns.IsRetail = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
+ns.IsForever = WOW_PROJECT_ID == WOW_PROJECT_CAMELOT
 ns.modules = {}
 ns.order = {}
 ns.pending = {}

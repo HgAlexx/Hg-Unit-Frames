@@ -17,6 +17,10 @@ local stickyPanels = {
 }
 
 function ns.OpenOptions()
+    if InCombatLockdown() then
+        ns.Warn(ns.L["Cannot open settings during combat."])
+        return
+    end
     local storage = ns.modules.Core.storage
     local key = storage.lastCategories and storage.lastCategories[ns.characterKey]
     local category = (type(key) == "string" and categoriesByKey[key]) or ns.category
@@ -82,6 +86,7 @@ function ns.Panel(title, subtitle, parentCategory, build)
         build = nil
         initialize(content)
         local module = ns.modules[stickyPanels[key]]
+        if module and module.defaults.showTooltip ~= nil then ns.TooltipOptions(content, module) end
         if module and ns.StickyOptions then ns.StickyOptions(content, module) end
     end
     local category
@@ -139,6 +144,20 @@ function ns.Panel(title, subtitle, parentCategory, build)
     end)
     panels[#panels + 1] = panel
     return content, category
+end
+
+function ns.TooltipOptions(content, module)
+    ns.Section(content, "Tooltip")
+    ns.Check(content, module, "showTooltip", "Show unit tooltip")
+    ns.SubOptions(content, function() return module.db.showTooltip end, function()
+        ns.Select(content, "Tooltip anchor", function()
+            return {
+                { text = "Right of frame", value = "right" },
+                { text = "WoW default", value = "default" },
+            }
+        end, function() return module.db.tooltipAnchor end,
+            function(value) ns.Set(module, "tooltipAnchor", value) end)
+    end)
 end
 
 local INDENT = 20

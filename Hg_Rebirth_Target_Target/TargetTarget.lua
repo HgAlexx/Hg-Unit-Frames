@@ -2,6 +2,7 @@ local ns = Hg_Rebirth
 local Chain = {
     savedVariable = "Hg_Rebirth_Target_Target_Options",
     defaults = {
+        showTooltip = true, tooltipAnchor = "default",
         locked = true, scale = 1, opacity = 1, showTarget = true, showTargetTarget = false,
         showPower = true, className = true, numericHealth = false,
         buffs = false, debuffs = false, targetBuffs = false, targetDebuffs = false,
@@ -34,6 +35,7 @@ local Chain = {
         targetSticky1Y = 0,
     },
     ranges = {
+        tooltipAnchor = { right = true, default = true },
         scale = { 0.01, 1.49 }, opacity = { 0, 1 },
         auraSpacingHorizontal = { -10, 30 }, auraSpacingVertical = { -10, 30 },
         groupSpacingVertical = { 0, 100 },
@@ -63,14 +65,7 @@ function Chain:Exists(unit)
 end
 
 local function overlay(owner, parent, entry)
-    local button = ns.UnitOverlay(owner, parent, entry.frame, entry.unit, entry.xKey, entry.yKey)
-    button:SetScript("OnEnter", function()
-        if GameTooltip:IsForbidden() then return end
-        GameTooltip:SetOwner(button, "ANCHOR_RIGHT")
-        GameTooltip:SetUnit(entry.unit)
-    end)
-    button:SetScript("OnLeave", function() if not GameTooltip:IsForbidden() then GameTooltip:Hide() end end)
-    return button
+    return ns.UnitOverlay(owner, parent, entry.frame, entry.unit, entry.xKey, entry.yKey)
 end
 
 function Chain:CreateUnit(name, unit, enabledKey, xKey, yKey, buffsKey, debuffsKey)
@@ -101,8 +96,8 @@ function Chain:CreateUnit(name, unit, enabledKey, xKey, yKey, buffsKey, debuffsK
     entry.power.text:SetPoint("TOP", 0, 0)
     for _, bar in ipairs({ entry.health, entry.power }) do
         bar.button = overlay(self, bar.frame, entry)
-        bar.button:SetScript("OnEnter", function() bar.hover = true; self:UpdateUnit(entry) end)
-        bar.button:SetScript("OnLeave", function() bar.hover = false; self:UpdateUnit(entry) end)
+        bar.button:HookScript("OnEnter", function() bar.hover = true; self:UpdateUnit(entry) end)
+        bar.button:HookScript("OnLeave", function() bar.hover = false; self:UpdateUnit(entry) end)
     end
     ns.CreateChainedAuras(entry)
     for _, parent in ipairs({ entry.nameBox, entry.stats }) do

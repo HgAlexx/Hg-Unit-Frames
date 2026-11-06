@@ -2,6 +2,7 @@ local ns = Hg_Rebirth
 local Focus = {
     savedVariable = "Hg_Rebirth_Focus_Options",
     defaults = {
+        showTooltip = true, tooltipAnchor = "default",
         locked = true, style = "new", compact = true, compactPercent = true,
         shortBars = false, healer = false, manaDeficit = false, scale = 1, opacity = 1,
         classIcon = true, classPanel = true, pvpIcon = true,
@@ -19,6 +20,7 @@ local Focus = {
         stickyScale = false,
     },
     ranges = {
+        tooltipAnchor = { right = true, default = true },
         style = { classic = true, new = true }, scale = { 0.01, 1.49 },
         opacity = { 0, 1 },
     },
@@ -36,16 +38,7 @@ end
 local function box(owner, width, height)
     local frame = ns.Box(owner.frame, width, height)
     owner.boxes[#owner.boxes + 1] = frame
-    local button = ns.UnitOverlay(owner, frame, owner.frame, "focus")
-    button:SetScript("OnEnter", function()
-        if GameTooltip:IsForbidden() then return end
-        GameTooltip:SetOwner(button, "ANCHOR_RIGHT")
-        GameTooltip:SetUnit("focus")
-        GameTooltip:Show()
-    end)
-    button:SetScript("OnLeave", function()
-        if not GameTooltip:IsForbidden() then GameTooltip:Hide() end
-    end)
+    ns.UnitOverlay(owner, frame, owner.frame, "focus")
     return frame
 end
 
@@ -105,8 +98,8 @@ function Focus:Create()
         entry.right:SetTextColor(1, 1, 1)
         entry.percent:SetTextColor(1, 1, 1)
         entry.button = ns.UnitOverlay(self, entry.frame, self.frame, "focus")
-        entry.button:SetScript("OnEnter", function() entry.hover = true; self:UpdateVitals() end)
-        entry.button:SetScript("OnLeave", function() entry.hover = false; self:UpdateVitals() end)
+        entry.button:HookScript("OnEnter", function() entry.hover = true; self:UpdateVitals() end)
+        entry.button:HookScript("OnLeave", function() entry.hover = false; self:UpdateVitals() end)
     end
     self.healthCurve = ns.CreateHealthCurve()
 end

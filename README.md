@@ -5,9 +5,12 @@ Designed for **Retail and Forever**. Classic clients will never be not supported
 
 ---
 
-**Hg Unit Frames** is still in **Beta**!
+**Hg Unit Frames** is young and might still have few issues!
 
-Please report any bug or request any feature [here](https://github.com/HgAlexx/Hg-Unit-Frames/issues) :)
+Please report any issue or request any feature [here](https://github.com/HgAlexx/Hg-Unit-Frames/issues) :)
+
+Please also note that most localizations have been google-translated and might need corrections. [Pull requests](https://github.com/HgAlexx/Hg-Unit-Frames/fork) are welcome!
+
 
 ---
 
@@ -49,4 +52,6 @@ All options are available under **Settings > AddOns > Hg Unit Frames**.
 
 Open configuration with `/hguf`, the minimap button, or the AddOn compartment entry. Each display has its own settings panel, while common settings and presets make it easy to configure the whole interface together.
 
-Use **Positioning mode** to arrange frames and preview their layouts without needing a target, pet or group.
+Use **Positioning mode** to arrange frames and preview their layouts without needing a target, pet or group. In this mode, the tooltip hover each element will list which settings can affect it.
+
+You can toggle in and out of it using right-click on the minimap icon.

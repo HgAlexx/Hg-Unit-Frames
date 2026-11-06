@@ -1,6 +1,11 @@
 local _, ns = ...
 local L = ns.NewLocale("frFR")
 if not L then return end
+L["Tooltip"] = "Infobulle"
+L["Show unit tooltip"] = "Afficher l'infobulle de l'unité"
+L["Tooltip anchor"] = "Ancrage de l'infobulle"
+L["Right of frame"] = "À droite du cadre"
+L["WoW default"] = "Emplacement par défaut de WoW"
 L["Sticky mode"] = "Ancrage lié"
 L["Move with parent"] = "Déplacer avec le parent"
 L["Scale with parent"] = "Utiliser l'échelle du parent"
@@ -100,6 +105,7 @@ L["Nudge down 1 pixel"] = "Descendre de 1 pixel"
 L["Nudge left 1 pixel"] = "Déplacer à gauche de 1 pixel"
 L["Nudge right 1 pixel"] = "Déplacer à droite de 1 pixel"
 L["Cannot nudge frames during combat."] = "Impossible de déplacer les cadres en combat."
+L["Cannot open settings during combat."] = "Impossible d'ouvrir les paramètres en combat."
 L["Frame positioning requires initialized custom frames."] = "Les cadres personnalisés doivent être initialisés pour les déplacer."
 L["Frame positioning geometry unavailable."] = "Géométrie de positionnement des cadres indisponible."
 L["Align right of Player"] = "Aligner à droite du joueur"

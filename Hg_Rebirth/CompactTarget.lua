@@ -1,17 +1,7 @@
 local _, ns = ...
 
 local function overlay(owner, parent, entry)
-    local button = ns.UnitOverlay(owner, parent, entry.frame, entry.unit, entry.xKey, entry.yKey)
-    button:SetScript("OnEnter", function()
-        if GameTooltip:IsForbidden() then return end
-        GameTooltip:SetOwner(button, "ANCHOR_RIGHT")
-        GameTooltip:SetUnit(entry.unit)
-        GameTooltip:Show()
-    end)
-    button:SetScript("OnLeave", function()
-        if not GameTooltip:IsForbidden() then GameTooltip:Hide() end
-    end)
-    return button
+    return ns.UnitOverlay(owner, parent, entry.frame, entry.unit, entry.xKey, entry.yKey)
 end
 
 function ns.CreateCompactTarget(owner, entry, name)
@@ -38,8 +28,8 @@ function ns.CreateCompactTarget(owner, entry, name)
         local bar = index == 1 and entry.health or entry.power
         bar.text:SetTextHeight(11)
         bar.button = ns.UnitOverlay(owner, bar.frame, entry.frame, entry.unit, entry.xKey, entry.yKey)
-        bar.button:SetScript("OnEnter", function() bar.hover = true; owner:UpdateMember(entry) end)
-        bar.button:SetScript("OnLeave", function() bar.hover = false; owner:UpdateMember(entry) end)
+        bar.button:HookScript("OnEnter", function() bar.hover = true; owner:UpdateMember(entry) end)
+        bar.button:HookScript("OnLeave", function() bar.hover = false; owner:UpdateMember(entry) end)
     end
     if owner.borderAPI then
         for _, parent in ipairs({ entry.nameBox, entry.stats }) do

@@ -1,6 +1,11 @@
 local _, ns = ...
 local L = ns.NewLocale("esES")
 if not L then return end
+L["Tooltip"] = "Descripción emergente"
+L["Show unit tooltip"] = "Mostrar descripción de la unidad"
+L["Tooltip anchor"] = "Anclaje de la descripción"
+L["Right of frame"] = "A la derecha del marco"
+L["WoW default"] = "Ubicación predeterminada de WoW"
 L["Sticky mode"] = "Modo de enlace"
 L["Move with parent"] = "Mover con el marco principal"
 L["Scale with parent"] = "Usar escala del marco principal"
@@ -100,6 +105,7 @@ L["Nudge down 1 pixel"] = "Mover abajo 1 píxel"
 L["Nudge left 1 pixel"] = "Mover a la izquierda 1 píxel"
 L["Nudge right 1 pixel"] = "Mover a la derecha 1 píxel"
 L["Cannot nudge frames during combat."] = "No se pueden mover los marcos en combate."
+L["Cannot open settings during combat."] = "No se pueden abrir los ajustes en combate."
 L["Frame positioning requires initialized custom frames."] = "Se requieren marcos personalizados inicializados para moverlos."
 L["Frame positioning geometry unavailable."] = "Geometría de posicionamiento no disponible."
 L["Align right of Player"] = "Alinear a la derecha del jugador"

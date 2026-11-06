@@ -6,13 +6,14 @@ local floor = math.floor
 local Player = {
     savedVariable = "Hg_Rebirth_Player_Options",
     defaults = {
+        showTooltip = true, tooltipAnchor = "default",
         locked = true, progress = "experience", compact = true, healer = false,
         raidGroup = true, scale = 1, opacity = 1, portrait = false,
         compactPercent = true, portrait3D = false, combatText = false,
         alternateMana = true, shortBars = false, className = true,
         showLevel = true, matchLevelHeight = true, manaDeficit = false, showInRaid = true,
         pvpIcon = true, barValues = false, groupInName = false,
-        fiveSecondRule = false, pvpTimer = false, classResource = true,
+        fiveSecondRule = true, pvpTimer = false, classResource = true,
         resourceColor = { 0.75, 0, 0 }, resourceOnTop = false,
         x = -2, y = -20,
         sticky1ChildY = 0,
@@ -26,7 +27,8 @@ local Player = {
         sticky1Placed = false,
         stickyParent = "",
     },
-    ranges = { scale = { 0.01, 1.49 }, opacity = { 0, 1 },
+    ranges = { tooltipAnchor = { right = true, default = true },
+        scale = { 0.01, 1.49 }, opacity = { 0, 1 },
         progress = { experience = true, reputation = true, hidden = true },
         resourceColor = ns.rgbRange },
     buttons = {}, boxes = {}, bars = {},
@@ -75,8 +77,8 @@ local function bar(owner, id)
     button:SetFrameLevel(frame:GetFrameLevel() + 3)
     local result = { frame = frame, background = background,
         percent = percent, value = value, compact = compact, button = button }
-    button:SetScript("OnEnter", function() result.hover = true; owner:UpdateVitals() end)
-    button:SetScript("OnLeave", function() result.hover = false; owner:UpdateVitals() end)
+    button:HookScript("OnEnter", function() result.hover = true; owner:UpdateVitals() end)
+    button:HookScript("OnLeave", function() result.hover = false; owner:UpdateVitals() end)
     owner.bars[id] = result
     return result
 end
@@ -169,7 +171,7 @@ function Player:Create()
     progress.rest:SetFrameLevel(progress.frame:GetFrameLevel() - 1)
     progress.rest:SetStatusBarTexture(ns.TexturePath())
     progress.button:SetScript("OnEnter", function() self:ProgressTooltip(progress.button) end)
-    progress.button:SetScript("OnLeave", function() GameTooltip:Hide() end)
+    progress.button:SetScript("OnLeave", ns.HideUnitTooltip)
     self.ticker = CreateFrame("Frame", nil, power.frame)
     self.ticker:SetSize(150, 2)
     self.ticker:SetPoint("TOPLEFT", power.frame, "BOTTOMLEFT")
@@ -257,7 +259,7 @@ function Player:Layout()
     self.bars.mana.frame:SetShown(hasMana)
     self.ticker:SetWidth(self.bars.power.frame:GetWidth())
     if not ns.IsForever or not db.fiveSecondRule then
-        self.lastMana, self.manaSpent, self.manaElapsed = nil, nil, nil
+        self.manaSpent, self.manaElapsed = nil, nil
         self.ticker:Hide()
     end
     local progress = self.bars.progress
@@ -426,9 +428,9 @@ function Player:Preview()
     progress.rest:SetMinMaxValues(0, 100); progress.rest:SetValue(85)
     progress.rest:SetStatusBarColor(0.3, 0.5, 1)
     progress.rest:SetShown(db.progress == "experience")
-    -- Five-second mana-rule preview, suspended until restricted mana spending can be detected.
-    -- self.ticker:SetShown(ns.IsForever and db.fiveSecondRule)
-    self.ticker:Hide()
+    self.ticker.spark:ClearAllPoints()
+    self.ticker.spark:SetPoint("CENTER", self.ticker, "LEFT", self.ticker:GetWidth() / 2, 0)
+    self.ticker:SetShown(ns.IsForever and db.fiveSecondRule)
 end
 
 function Player:Refresh()
@@ -476,22 +478,6 @@ function Player:UpdateBar(entry, powerType, health)
     if db.compact and db.compactPercent and (ns.IsSecret(percent) or percent ~= nil) then
         entry.compact:SetFormattedText("%.0f%%", percent)
     end
-    if powerType == 0 and entry == self.bars.power and ns.IsForever and db.fiveSecondRule then
-        if not ns.IsSecret(value) then
-            if self.lastMana and value < self.lastMana then
-                self.manaSpent = GetTime()
-                self.manaElapsed = 0
-                self.ticker.spark:ClearAllPoints()
-                self.ticker.spark:SetPoint("CENTER", self.ticker, "LEFT", 0, 0)
-                self.ticker:Show()
-            end
-            self.lastMana = value
-        else
-            self.lastMana, self.manaSpent = nil, nil
-            self.ticker:Hide()
-            self:Notice("manaRule", "Five-second mana rule unavailable while mana values are restricted.")
-        end
-    end
 end
 
 function Player:UpdateVitals(kind)
@@ -500,7 +486,7 @@ function Player:UpdateVitals(kind)
     if kind == "health" then return end
     local powerType = UnitPowerType(self.unit or "player")
     if powerType ~= 0 then
-        self.lastMana, self.manaSpent, self.manaElapsed = nil, nil, nil
+        self.manaSpent, self.manaElapsed = nil, nil
         self.ticker:Hide()
     end
     self:UpdateBar(self.bars.power, powerType, false)
@@ -606,8 +592,7 @@ function Player:UpdateProgress()
 end
 
 function Player:ProgressTooltip(button)
-    if GameTooltip:IsForbidden() then return end
-    GameTooltip:SetOwner(button, "ANCHOR_RIGHT")
+    if not ns.AnchorUnitTooltip(self, button) then return end
     if self.db.progress == "experience" then
         local value, maximum, rested, capped = experienceData(self)
         if value == nil then GameTooltip:SetText(ns.L["N/A"])
@@ -725,6 +710,39 @@ function Player:Feedback(action, descriptor, amount, school)
     ns.ShowCombatFeedback(self, action, descriptor, amount, school)
 end
 
+function Player:ManaRuleSpellSucceeded(spellID)
+    if not ns.IsForever or not self.db.fiveSecondRule or self.unit ~= "player" then return end
+    if ns.IsSecret(spellID) then
+        self:Notice("manaRuleSpell", "Five-second mana rule unavailable while spell IDs are restricted.")
+        return
+    end
+    if type(spellID) ~= "number" then return end
+    if not C_Spell or not C_Spell.GetSpellPowerCost then
+        self:Notice("manaRuleAPI", "Five-second mana rule requires the spell power cost API.")
+        return
+    end
+    local costs = C_Spell.GetSpellPowerCost(spellID)
+    if ns.IsSecret(costs) then
+        self:Notice("manaRuleCost", "Five-second mana rule unavailable while spell costs are restricted.")
+        return
+    end
+    if not costs then return end
+    -- The API returns one cost record per resource type, not a single record.
+    for _, cost in ipairs(costs) do
+        if ns.IsSecret(cost) or ns.IsSecret(cost.type) or ns.IsSecret(cost.minCost) then
+            self:Notice("manaRuleCost", "Five-second mana rule unavailable while spell costs are restricted.")
+        elseif cost.type == Enum.PowerType.Mana and type(cost.minCost) == "number" and cost.minCost > 0 then
+            local powerType = UnitPowerType("player")
+            if ns.IsSecret(powerType) or powerType ~= Enum.PowerType.Mana then return end
+            self.manaSpent, self.manaElapsed = GetTime(), 0
+            self.ticker.spark:ClearAllPoints()
+            self.ticker.spark:SetPoint("CENTER", self.ticker, "LEFT", 0, 0)
+            self.ticker:Show()
+            return
+        end
+    end
+end
+
 function Player:TickManaRule(elapsed)
     if ns.positioning then return end
     self.manaElapsed = (self.manaElapsed or 0) + elapsed
@@ -797,12 +815,15 @@ function Player:Start()
         "UNIT_MODEL_CHANGED", "UNIT_FACTION", "UNIT_THREAT_SITUATION_UPDATE",
         "UNIT_ENTERED_VEHICLE", "UNIT_EXITED_VEHICLE",
     }) do events:RegisterUnitEvent(event, "player", "vehicle") end
+    if ns.IsForever then events:RegisterUnitEvent("UNIT_SPELLCAST_SUCCEEDED", "player") end
     events:SetScript("OnEvent", function(_, event, unit, action, descriptor, amount, school)
         if ns.positioning and (event == "UNIT_ENTERED_VEHICLE" or event == "UNIT_EXITED_VEHICLE") then
             self.unit = UnitHasVehicleUI("player") and "vehicle" or "player"
         end
         if ns.PreviewUnit(self, "Player") then return end
-        if event == "UNIT_COMBAT" then self:Feedback(action, descriptor, amount, school)
+        if event == "UNIT_SPELLCAST_SUCCEEDED" then
+            if not ns.IsSecret(unit) and unit == "player" then self:ManaRuleSpellSucceeded(descriptor) end
+        elseif event == "UNIT_COMBAT" then self:Feedback(action, descriptor, amount, school)
         elseif ns.VitalsEventKinds[event] then self:UpdateVitals(ns.VitalsEventKinds[event])
         elseif event == "UNIT_PORTRAIT_UPDATE" or event == "UNIT_MODEL_CHANGED" then self:UpdatePortrait()
         elseif event == "UNIT_THREAT_SITUATION_UPDATE" then self:UpdateThreat()

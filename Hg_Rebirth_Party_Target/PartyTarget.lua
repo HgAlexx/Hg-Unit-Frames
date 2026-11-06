@@ -2,6 +2,7 @@ local ns = Hg_Rebirth
 local PartyTarget = {
     savedVariable = "Hg_Rebirth_Party_Target_Options",
     defaults = {
+        showTooltip = true, tooltipAnchor = "default",
         enabled = true, showInRaid = true, locked = true, showPower = false,
         className = true, scale = 1, opacity = 1,
         x1 = 233.0000457763672, y1 = -214, x2 = 233.0000457763672, y2 = -309,
@@ -38,7 +39,8 @@ local PartyTarget = {
         sticky3ChildY = 0,
         sticky2X = -5.155516296293456,
     },
-    ranges = { scale = { 0.01, 1.49 }, opacity = { 0, 1 } },
+    ranges = { tooltipAnchor = { right = true, default = true },
+        scale = { 0.01, 1.49 }, opacity = { 0, 1 } },
     members = {}, buttons = {},
 }
 ns.RegisterModule("PartyTarget", PartyTarget)

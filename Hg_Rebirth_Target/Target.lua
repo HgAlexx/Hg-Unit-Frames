@@ -2,6 +2,7 @@ local ns = Hg_Rebirth
 local Target = {
     savedVariable = "Hg_Rebirth_Target_Options",
     defaults = {
+        showTooltip = true, tooltipAnchor = "default",
         locked = true, style = "new", compact = true, compactPercent = true,
         shortBars = false, healer = false, manaDeficit = false, scale = 1, opacity = 1,
         classIcon = true, classPanel = true, pvpIcon = true,
@@ -21,6 +22,7 @@ local Target = {
         sticky1ParentY = 1,
     },
     ranges = {
+        tooltipAnchor = { right = true, default = true },
         style = { classic = true, new = true }, scale = { 0.01, 1.49 },
         opacity = { 0, 1 },
         exclusive = { { "numericThreat", "classificationPanel" } },
@@ -118,8 +120,14 @@ function Target:Create()
         entry.right:SetTextColor(1, 1, 1)
         entry.percent:SetTextColor(1, 1, 1)
         entry.button = ns.UnitOverlay(self, entry.frame, self.frame, "target")
-        entry.button:SetScript("OnEnter", function() entry.hover = true; self:UpdateVitals() end)
-        entry.button:SetScript("OnLeave", function() entry.hover = false; self:UpdateVitals() end)
+        entry.button:HookScript("OnEnter", function()
+            entry.hover = true
+            self:UpdateVitals()
+        end)
+        entry.button:HookScript("OnLeave", function()
+            entry.hover = false
+            self:UpdateVitals()
+        end)
     end
     self.healthCurve = ns.CreateHealthCurve()
 end

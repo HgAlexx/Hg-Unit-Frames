@@ -45,6 +45,7 @@ function Player:BuildOptions(category)
             ns.Check(content, self, "combatText", "Portrait combat text")
         end)
         ns.Section(content, "Status and class resources")
+        if ns.IsForever then ns.Check(content, self, "fiveSecondRule", "Show five-second mana rule") end
         for _, option in ipairs({
             { "raidGroup", "Show raid group number" },
             { "groupInName", "Show raid group in name (in raid)" },

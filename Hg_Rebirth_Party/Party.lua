@@ -2,6 +2,7 @@ local ns = Hg_Rebirth
 local Party = {
     savedVariable = "Hg_Rebirth_Party_Options",
     defaults = {
+        showTooltip = true, tooltipAnchor = "default",
         locked = true, compact = true, visibility = "always", spacing = 95,
         scale = 1, opacity = 1, showPets = true, healer = false, vertical = true,
         compactPercent = true, portrait = false, showKeys = true, portrait3D = false,
@@ -23,6 +24,7 @@ local Party = {
         sticky1ParentY = 0,
     },
     ranges = {
+        tooltipAnchor = { right = true, default = true },
         visibility = { always = true, raid = true, hidden = true },
         spacing = { -150, 150, integer = true }, scale = { 0.01, 1.49 }, opacity = { 0, 1 },
         auraSpacingHorizontal = { -10, 30 },
@@ -51,24 +53,11 @@ local function overlay(parent, unit)
     return ns.UnitOverlay(Party, parent, Party.frame, unit)
 end
 
-local function showTooltip(button, unit)
-    if GameTooltip:IsForbidden() then return end
-    GameTooltip:SetOwner(button, "ANCHOR_RIGHT")
-    GameTooltip:SetUnit(unit)
-    GameTooltip:Show()
-end
-
-local function hideTooltip()
-    if not GameTooltip:IsForbidden() then GameTooltip:Hide() end
-end
-
 local function box(member, width, height)
     local frame = ns.Box(member.frame, width, height)
     Party.boxes[#Party.boxes + 1] = frame
     member.boxes[#member.boxes + 1] = frame
-    local button = overlay(frame, member.unit)
-    button:SetScript("OnEnter", function() showTooltip(button, member.unit) end)
-    button:SetScript("OnLeave", hideTooltip)
+    overlay(frame, member.unit)
     return frame
 end
 
@@ -170,11 +159,11 @@ function Party:CreateMember(index)
         entry.right:SetTextColor(1, 1, 1); entry.percent:SetTextColor(1, 1, 1)
         local unit = entry == member.petHealth and member.petUnit or member.unit
         entry.button = overlay(entry.frame, unit)
-        entry.button:SetScript("OnEnter", function()
-            entry.hover = true; self:UpdateVitals(member); showTooltip(entry.button, unit)
+        entry.button:HookScript("OnEnter", function()
+            entry.hover = true; self:UpdateVitals(member)
         end)
-        entry.button:SetScript("OnLeave", function()
-            entry.hover = false; self:UpdateVitals(member); hideTooltip()
+        entry.button:HookScript("OnLeave", function()
+            entry.hover = false; self:UpdateVitals(member)
         end)
     end
     member.buffs, member.debuffs = auraGroup(member, false), auraGroup(member, true)

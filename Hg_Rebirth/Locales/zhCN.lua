@@ -1,6 +1,11 @@
 local _, ns = ...
 local L = ns.NewLocale("zhCN")
 if not L then return end
+L["Tooltip"] = "鼠标提示"
+L["Show unit tooltip"] = "显示单位鼠标提示"
+L["Tooltip anchor"] = "鼠标提示锚点"
+L["Right of frame"] = "框体右侧"
+L["WoW default"] = "WoW 默认位置"
 L["Sticky mode"] = "框体吸附"
 L["Move with parent"] = "随父框体移动"
 L["Scale with parent"] = "使用父框体缩放"
@@ -100,6 +105,7 @@ L["Nudge down 1 pixel"] = "向下移动1像素"
 L["Nudge left 1 pixel"] = "向左移动1像素"
 L["Nudge right 1 pixel"] = "向右移动1像素"
 L["Cannot nudge frames during combat."] = "战斗中无法移动框体。"
+L["Cannot open settings during combat."] = "战斗中无法打开设置。"
 L["Frame positioning requires initialized custom frames."] = "移动框体需要已初始化的自定义框体。"
 L["Frame positioning geometry unavailable."] = "框体定位信息不可用。"
 L["Align right of Player"] = "对齐到玩家右侧"

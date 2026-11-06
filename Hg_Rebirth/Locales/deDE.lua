@@ -1,6 +1,11 @@
 local _, ns = ...
 local L = ns.NewLocale("deDE")
 if not L then return end
+L["Tooltip"] = "Tooltip"
+L["Show unit tooltip"] = "Einheiten-Tooltip anzeigen"
+L["Tooltip anchor"] = "Tooltip-Verankerung"
+L["Right of frame"] = "Rechts vom Fenster"
+L["WoW default"] = "WoW-Standardposition"
 L["Sticky mode"] = "Anheftmodus"
 L["Move with parent"] = "Mit übergeordnetem Fenster bewegen"
 L["Scale with parent"] = "Skalierung des übergeordneten Fensters übernehmen"
@@ -100,6 +105,7 @@ L["Nudge down 1 pixel"] = "1 Pixel nach unten"
 L["Nudge left 1 pixel"] = "1 Pixel nach links"
 L["Nudge right 1 pixel"] = "1 Pixel nach rechts"
 L["Cannot nudge frames during combat."] = "Fenster können im Kampf nicht verschoben werden."
+L["Cannot open settings during combat."] = "Einstellungen können im Kampf nicht geöffnet werden."
 L["Frame positioning requires initialized custom frames."] = "Zum Verschieben müssen eigene Fenster initialisiert sein."
 L["Frame positioning geometry unavailable."] = "Fenstergeometrie zum Verschieben nicht verfügbar."
 L["Align right of Player"] = "Rechts neben dem Spieler ausrichten"
