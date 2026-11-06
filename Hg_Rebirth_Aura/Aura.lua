@@ -2,6 +2,7 @@ local ns = Hg_Rebirth
 local buttonElements = {}
 local function createCooldown(parent)
     local cooldown = CreateFrame("Cooldown", nil, parent, "CooldownFrameTemplate")
+    cooldown:EnableMouse(false)
     cooldown:SetAllPoints()
     cooldown:SetReverse(true)
     cooldown:SetHideCountdownNumbers(true)
@@ -250,6 +251,7 @@ function Engine:Preview()
         local icon = self.preview.icons[i]
         if not icon then
             icon = CreateFrame("Frame", nil, self.preview)
+            ns.BindFrameOptions(icon, self)
             icon:SetSize(30, 30)
             icon.texture = icon:CreateTexture(nil, "BACKGROUND")
             icon.texture:SetAllPoints()

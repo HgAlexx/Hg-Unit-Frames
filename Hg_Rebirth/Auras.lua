@@ -33,6 +33,7 @@ function ns.LayoutAuraPreview(entry, anchor, count, size, columns, spacing, line
         local icon = preview.icons[index]
         if not icon then
             icon = CreateFrame("Frame", nil, preview)
+            ns.BindFrameOptions(icon)
             icon.texture = icon:CreateTexture(nil, "ARTWORK")
             icon.texture:SetAllPoints()
             icon.texture:SetTexture(harmful and "Interface\\Icons\\Spell_Shadow_ShadowWordPain"
@@ -56,6 +57,7 @@ function ns.LayoutAuraPreview(entry, anchor, count, size, columns, spacing, line
         if timers then
             if not icon.cooldown then
                 icon.cooldown = CreateFrame("Cooldown", nil, icon, "CooldownFrameTemplate")
+                icon.cooldown:EnableMouse(false)
                 icon.cooldown:SetAllPoints()
                 icon.cooldown:SetReverse(true)
                 icon.cooldown:SetHideCountdownNumbers(true)

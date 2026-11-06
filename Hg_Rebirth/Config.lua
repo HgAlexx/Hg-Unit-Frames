@@ -4,6 +4,7 @@ function ns.TogglePositioning()
     if not ns.SetPositioning(not ns.positioning) then return end
     ns.Print(ns.positioning and "Positioning mode enabled: drag loaded frames even when locked."
         or "Positioning mode disabled.")
+    if ns.positioning then ns.Print(ns.L["Middle-click a frame or aura to open its settings."]) end
 end
 
 local function commonSetting(parent, key, text)
@@ -37,6 +38,7 @@ function ns.BuildOptions()
         ns.Check(content, core, "muteWarnings", "Mute warning messages")
         ns.Section(content, "Positioning")
         ns.Button(content, "Toggle positioning mode", ns.TogglePositioning)
+        ns.Description(content, "Middle-click a frame or aura to open its settings.")
         ns.Button(content, "Reset frame positions", function()
             ns.Confirm("Reset loaded frame positions for this character?", function()
                 if InCombatLockdown() then ns.Warn("Cannot reset positions during combat."); return end

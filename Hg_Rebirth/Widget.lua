@@ -1,5 +1,8 @@
 local _, ns = ...
 local panels = {}
+local framePanels = {}
+local floating
+local layoutFrameOptions
 local categoriesByKey = {}
 local categoryOrder = {
     ["Common settings"] = 0,
@@ -15,6 +18,11 @@ local stickyPanels = {
     ["Target Target"] = "TargetTarget", ["Focus"] = "Focus", ["Focus Target"] = "FocusTarget",
     ["Party"] = "Party", ["Party Target"] = "PartyTarget", ["Party Pet"] = "PartyPet",
 }
+local auraPanels = { ["Player Aura"] = "PlayerAura", ["Target Aura"] = "TargetAura", ["Focus Aura"] = "FocusAura" }
+
+function ns.HideFrameOptions()
+    if floating then floating:Hide() end
+end
 
 function ns.OpenOptions()
     if InCombatLockdown() then
@@ -52,6 +60,7 @@ end
 
 function ns.Panel(title, subtitle, parentCategory, build)
     local key = title
+    local moduleId = stickyPanels[key] or auraPanels[key]
     local rank = categoryOrder[title] or 100
     title = ns.L[title]
     local panel = CreateFrame("Frame")
@@ -77,8 +86,13 @@ function ns.Panel(title, subtitle, parentCategory, build)
     content:SetSize(600, 1)
     scroll:SetScrollChild(content)
     content:SetPoint("TOPLEFT", scroll, "TOPLEFT", 0, 0)
-    scroll:SetScript("OnSizeChanged", function(_, width) content:SetWidth(math.max(1, width)) end)
+    scroll:SetScript("OnSizeChanged", function(_, width)
+        if content:GetParent() ~= scroll then return end
+        content:SetWidth(math.max(1, width))
+        if moduleId and content.baseHeight then layoutFrameOptions(content, math.max(1, width)) end
+    end)
     content.cursor = 0
+    content.layoutWidgets = {}
     content.optionsPanel = panel
     function panel:BuildOptions()
         if not build then return end
@@ -88,6 +102,13 @@ function ns.Panel(title, subtitle, parentCategory, build)
         local module = ns.modules[stickyPanels[key]]
         if module and module.defaults.showTooltip ~= nil then ns.TooltipOptions(content, module) end
         if module and ns.StickyOptions then ns.StickyOptions(content, module) end
+        content.baseHeight = content:GetHeight()
+        for _, item in ipairs(content.layoutWidgets) do
+            item.points = {}
+            for index = 1, item.widget:GetNumPoints() do
+                item.points[index] = { item.widget:GetPoint(index) }
+            end
+        end
     end
     local category
     if parentCategory then
@@ -129,6 +150,7 @@ function ns.Panel(title, subtitle, parentCategory, build)
         if panel:IsShown() then restoreScroll() end
     end)
     panel:SetScript("OnShow", function()
+        ns.HideFrameOptions()
         restoringLayout = true
         panel:BuildOptions()
         local storage = ns.modules.Core.storage
@@ -143,6 +165,9 @@ function ns.Panel(title, subtitle, parentCategory, build)
         restoreScroll()
     end)
     panels[#panels + 1] = panel
+    if moduleId then
+        framePanels[moduleId] = { panel = panel, content = content, scroll = scroll, title = title }
+    end
     return content, category
 end
 
@@ -202,6 +227,9 @@ local function conditionsMet(conditions)
 end
 
 local function place(parent, widget, height, structural)
+    parent.layoutWidgets[#parent.layoutWidgets + 1] = {
+        widget = widget, top = parent.cursor, height = height,
+    }
     widget:SetPoint("TOPLEFT", parent, "TOPLEFT", (parent.indent or 0) * INDENT, -parent.cursor)
     parent.cursor = parent.cursor + height
     parent:SetHeight(parent.cursor + 16)
@@ -252,6 +280,8 @@ function ns.Toggle(parent, text, getValue, setValue, tip)
     check:SetSize(24, 24)
     place(parent, check, 28)
     check.Text:SetText(ns.L[text])
+    check.layoutText = check.Text
+    check.layoutKind = "check"
     check.tip = tip
     check:SetScript("OnEnter", tooltip)
     check:SetScript("OnLeave", function() GameTooltip:Hide() end)
@@ -291,6 +321,8 @@ function ns.Slider(parent, module, key, text, minimum, maximum, step, multiplier
     slider.Low:SetPoint("TOPLEFT", slider, "BOTTOMLEFT", 0, -2)
     slider.High:SetPoint("TOPRIGHT", slider, "BOTTOMRIGHT", 0, -2)
     slider:SetSize(260, 16)
+    slider.layoutText = slider.Text
+    slider.layoutKind = "slider"
     parent.cursor = parent.cursor + 18
     place(parent, slider, 44)
     slider:SetMinMaxValues(minimum, maximum)
@@ -340,6 +372,9 @@ function ns.Button(parent, text, callback, width)
     local label = button:GetFontString()
     label:SetWordWrap(false)
     button:SetWidth(math.max(width or 260, math.ceil(label:GetStringWidth()) + 32))
+    button.layoutText = label
+    button.layoutKind = "button"
+    button.layoutWidth = button:GetWidth()
     button:SetScript("OnClick", callback)
     return button
 end
@@ -407,6 +442,7 @@ function ns.Description(parent, text)
     note:SetWordWrap(true)
     note:SetJustifyH("LEFT")
     note:SetText(ns.L[text])
+    note.layoutKind = "description"
     place(parent, note, 44)
     return note
 end
@@ -517,8 +553,255 @@ end
 
 function ns.RefreshOptions(panel)
     for _, candidate in ipairs(panels) do
-        if (not panel or candidate == panel) and candidate:IsVisible() then
+        local borrowed = floating and floating:IsShown() and floating.active
+            and floating.active.panel == candidate
+        if (not panel or candidate == panel) and (candidate:IsVisible() or borrowed) then
             for _, refresh in ipairs(candidate.optionRefreshes) do refresh() end
+            if borrowed then layoutFrameOptions(floating.active.content, floating.active.content:GetWidth()) end
         end
     end
+end
+
+-- Borrow the actual panel controls so Settings and the floating window cannot diverge.
+layoutFrameOptions = function(content, width)
+    local extra = 0
+    local additions = {}
+    for _, item in ipairs(content.layoutWidgets) do
+        local widget, kind = item.widget, item.widget.layoutKind
+        local available = math.max(1, width - (item.points[1] and item.points[1][4] or 0) - 8)
+        local text = widget.layoutText
+        local added = 0
+        if kind == "check" then
+            text:ClearAllPoints()
+            text:SetPoint("TOPLEFT", widget, "TOPRIGHT", 4, -3)
+            text:SetWidth(math.max(1, available - 30))
+            text:SetHeight(0)
+            text:SetJustifyH("LEFT")
+            text:SetWordWrap(true)
+            added = math.max(0, text:GetStringHeight() - 20)
+        elseif kind == "button" then
+            widget:SetWidth(math.min(widget.layoutWidth, available))
+            text:SetWidth(math.max(1, widget:GetWidth() - 24))
+            text:SetHeight(0)
+            text:SetWordWrap(true)
+            added = math.max(0, text:GetStringHeight() + 12 - 24)
+            widget:SetHeight(24 + added)
+        elseif kind == "slider" then
+            text:SetWidth(math.min(260, available))
+            text:SetHeight(0)
+            text:SetWordWrap(true)
+            added = math.max(0, text:GetStringHeight() - 16)
+        elseif widget:GetObjectType() == "FontString" then
+            widget:SetWidth(available)
+            widget:SetHeight(0)
+            widget:SetJustifyH("LEFT")
+            widget:SetWordWrap(true)
+            local base = kind == "description" and 36 or item.height - (item.height == 32 and 8 or 0)
+            added = math.max(0, widget:GetStringHeight() - base)
+            widget:SetHeight(base + added)
+        end
+        if added > 0 then
+            additions[#additions + 1] = { top = item.top, amount = added }
+            extra = extra + added
+        end
+        item.extra = kind == "slider" and added or 0
+    end
+    for _, item in ipairs(content.layoutWidgets) do
+        item.widget:ClearAllPoints()
+        for _, point in ipairs(item.points) do
+            local offset = item.extra
+            if point[2] == content then
+                for _, addition in ipairs(additions) do
+                    if addition.top < item.top then offset = offset + addition.amount end
+                end
+            else offset = 0 end
+            item.widget:SetPoint(point[1], point[2], point[3], point[4], point[5] - offset)
+        end
+    end
+    content:SetHeight(content.baseHeight + extra)
+end
+
+local function createFrameOptions()
+    local window = CreateFrame("Frame", nil, UIParent)
+    window:Hide()
+    window:SetSize(460, 420)
+    window:SetPoint("CENTER")
+    window:SetFrameStrata("DIALOG")
+    window:SetClampedToScreen(true)
+    window:SetMovable(true)
+    window:SetResizable(true)
+    window:SetResizeBounds(400, 420)
+    window:EnableMouse(true)
+    window.Border = CreateFrame("Frame", nil, window, "DialogBorderTranslucentTemplate")
+    window.Border:SetAllPoints(window)
+    window.Border:EnableMouse(false)
+    window.title = ns.Label(window, "GameFontHighlightLarge")
+    window.title:SetPoint("TOP", 0, -15)
+    window.title:SetWidth(window:GetWidth() - 80)
+    window.title:SetJustifyH("CENTER")
+    window:SetScript("OnSizeChanged", function(_, width) window.title:SetWidth(math.max(1, width - 80)) end)
+    local header = CreateFrame("Frame", nil, window)
+    header:SetPoint("TOPLEFT")
+    header:SetPoint("TOPRIGHT", -36, 0)
+    header:SetHeight(38)
+    header:EnableMouse(true)
+    header:RegisterForDrag("LeftButton")
+    header:SetScript("OnDragStart", function() window:StartMoving() end)
+    header:SetScript("OnDragStop", function() window:StopMovingOrSizing() end)
+    window.close = CreateFrame("Button", nil, window, "UIPanelCloseButton")
+    window.close:SetPoint("TOPRIGHT")
+    window.close:SetScript("OnClick", function() window:Hide() end)
+    local scroll = CreateFrame("ScrollFrame", nil, window, "UIPanelScrollFrameTemplate")
+    window.scroll = scroll
+    scroll.ScrollBar.scrollStep = 28
+    scroll:SetPoint("TOPLEFT", 16, -44)
+    scroll:SetPoint("BOTTOMRIGHT", -32, 24)
+    local empty = CreateFrame("Frame", nil, scroll)
+    empty:SetSize(1, 1)
+    scroll:SetScrollChild(empty)
+    window.resize = CreateFrame("Button", nil, window)
+    window.resize:SetSize(20, 20)
+    window.resize:SetPoint("BOTTOMRIGHT", -2, 2)
+    window.resize:SetNormalTexture("Interface\\ChatFrame\\UI-ChatIM-SizeGrabber-Up")
+    window.resize:RegisterForDrag("LeftButton")
+    window.resize:SetScript("OnDragStart", function() window:StartSizing("BOTTOMRIGHT") end)
+    window.resize:SetScript("OnDragStop", function() window:StopMovingOrSizing() end)
+    scroll:SetScript("OnSizeChanged", function(_, width)
+        if not window.active then return end
+        window.active.content:SetWidth(math.max(1, width))
+        layoutFrameOptions(window.active.content, math.max(1, width))
+    end)
+    window:SetScript("OnHide", function()
+        window:StopMovingOrSizing()
+        local active = window.active
+        if not active then return end
+        window.active = nil
+        scroll:SetScrollChild(empty)
+        active.content:SetParent(active.scroll)
+        active.scroll:SetScrollChild(active.content)
+        active.content:ClearAllPoints()
+        active.content:SetPoint("TOPLEFT", active.scroll, "TOPLEFT", 0, 0)
+        local width = math.max(1, active.scroll:GetWidth())
+        active.content:SetWidth(width)
+        layoutFrameOptions(active.content, width)
+    end)
+    return window
+end
+
+local function positionFrameOptions(window, module, source)
+    source = source or module.frame
+    local function finite(value)
+        return not ns.IsSecret(value) and type(value) == "number"
+            and value == value and value ~= math.huge and value ~= -math.huge
+    end
+    local uiScale = UIParent:GetEffectiveScale()
+    local screenWidth, screenHeight = UIParent:GetWidth(), UIParent:GetHeight()
+    if not finite(uiScale) or uiScale <= 0 or not finite(screenWidth) or not finite(screenHeight) then
+        ns.Warn(ns.L["Frame positioning geometry unavailable."]); return false
+    end
+    local left, bottom, right, top
+    local function include(frame)
+        if not frame then return false end
+        local x, y, width, height = frame:GetRect()
+        local scale = frame:GetEffectiveScale()
+        if not finite(x) or not finite(y) or not finite(width) or not finite(height)
+            or not finite(scale) or scale <= 0 or width <= 0 or height <= 0 then return false end
+        local ratio = scale / uiScale
+        x, y, width, height = x * ratio, y * ratio, width * ratio, height * ratio
+        left, bottom = math.min(left or x, x), math.min(bottom or y, y)
+        right, top = math.max(right or x + width, x + width), math.max(top or y + height, y + height)
+        return true
+    end
+    if not include(source) then
+        ns.Warn(ns.L["Frame positioning geometry unavailable."]); return false
+    end
+    -- Unit overlays cover individual boxes; include the other boxes of that unit.
+    local unit = source:GetAttribute("unit")
+    if unit then
+        for _, button in ipairs(module.buttons or {}) do
+            if button:GetAttribute("unit") == unit and button:IsShown() then include(button:GetParent()) end
+        end
+    end
+    local gap = 12
+    local ratio = window:GetEffectiveScale() / uiScale
+    local function choose(width, height)
+        if width > screenWidth or height > screenHeight then return end
+        local x = math.max(0, math.min(screenWidth - width, (left + right - width) / 2))
+        local y = math.max(0, math.min(screenHeight - height, (bottom + top - height) / 2))
+        local candidates = {
+            { right + gap, y, (left + right) / (2 * screenWidth) },
+            { left - gap - width, y, 1 - (left + right) / (2 * screenWidth) },
+            { x, top + gap, (bottom + top) / (2 * screenHeight) },
+            { x, bottom - gap - height, 1 - (bottom + top) / (2 * screenHeight) },
+        }
+        local best, distance
+        for _, point in ipairs(candidates) do
+            local px, py = point[1], point[2]
+            if px >= 0 and py >= 0 and px + width <= screenWidth and py + height <= screenHeight then
+                local score = point[3]
+                if not distance or score < distance then best, distance = point, score end
+            end
+        end
+        return best
+    end
+    local point = choose(window:GetWidth() * ratio, window:GetHeight() * ratio)
+    if not point then
+        point = choose(400 * ratio, 420 * ratio)
+        if point then window:SetSize(400, 420) end
+    end
+    if not point then
+        ns.Warn(ns.L["Not enough screen space beside this frame for its settings."]); return false
+    end
+    window:ClearAllPoints()
+    window:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", point[1] / ratio, point[2] / ratio)
+    return true
+end
+
+function ns.OpenFrameOptions(module, source)
+    if not ns.positioning or InCombatLockdown() then return false end
+    local active
+    for id, candidate in pairs(ns.modules) do
+        if candidate == module then active = framePanels[id]; break end
+    end
+    if not active then ns.Warn(ns.L["Frame settings panel unavailable."]); return false end
+    if not floating then floating = createFrameOptions() end
+    if not positionFrameOptions(floating, module, source) then return false end
+    if floating.active == active and floating:IsShown() then
+        local width = math.max(1, floating:GetWidth() - 48)
+        active.content:SetWidth(width)
+        layoutFrameOptions(active.content, width)
+        return true
+    end
+    floating:Hide()
+    active.panel:BuildOptions()
+    floating.active = active
+    floating.title:SetText(active.title)
+    active.placeholder = active.placeholder or CreateFrame("Frame", nil, active.scroll)
+    active.placeholder:SetSize(1, 1)
+    active.scroll:SetScrollChild(active.placeholder)
+    active.content:SetParent(floating.scroll)
+    floating.scroll:SetScrollChild(active.content)
+    active.content:ClearAllPoints()
+    active.content:SetPoint("TOPLEFT", floating.scroll, "TOPLEFT", 0, 0)
+    local width = math.max(1, floating:GetWidth() - 48)
+    active.content:SetWidth(width)
+    layoutFrameOptions(active.content, width)
+    floating:Show()
+    ns.RefreshOptions(active.panel)
+    floating.scroll.ScrollBar:SetValue(0)
+    floating.scroll:SetVerticalScroll(0)
+    return true
+end
+
+function ns.BindFrameOptions(frame, module)
+    frame:EnableMouse(true)
+    frame:HookScript("OnMouseUp", function(_, button)
+        if button ~= "MiddleButton" or not ns.positioning or InCombatLockdown() then return end
+        local owner, parent = module, frame
+        while not owner and parent do
+            owner = parent.frameOptionsOwner
+            parent = parent:GetParent()
+        end
+        ns.OpenFrameOptions(owner, frame)
+    end)
 end

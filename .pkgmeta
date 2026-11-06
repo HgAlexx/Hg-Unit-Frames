@@ -29,7 +29,7 @@ ignore:
 
 embedded-libraries:
     - libstub
-    - callbackhandler-1.0
+    - callbackhandler
 
 tools-used:
-    - libdatabroker-1.1
+    - libdatabroker-1-1

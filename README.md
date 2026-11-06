@@ -52,6 +52,6 @@ All options are available under **Settings > AddOns > Hg Unit Frames**.
 
 Open configuration with `/hguf`, the minimap button, or the AddOn compartment entry. Each display has its own settings panel, while common settings and presets make it easy to configure the whole interface together.
 
-Use **Positioning mode** to arrange frames and preview their layouts without needing a target, pet or group. In this mode, the tooltip hover each element will list which settings can affect it.
+Use **Positioning mode** to arrange frames and preview their layouts without needing a target, pet or group. In this mode, the tooltip hover each element will list which settings can affect it. Use **middle-click** over a frame to **open its settings** related.
 
-You can toggle in and out of it using right-click on the minimap icon.
+You can toggle in and out of Positioning mode using right-click on the minimap icon.

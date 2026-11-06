@@ -316,6 +316,7 @@ end
 function ns.SetPositioning(enabled)
     if enabled and InCombatLockdown() then ns.Warn("Cannot position frames during combat."); return false end
     ns.positioning = enabled
+    if not enabled and ns.HideFrameOptions then ns.HideFrameOptions() end
     if ns.RefreshPreviewInspector then ns.RefreshPreviewInspector() end
     if not enabled and ns.HidePreviewInspector then ns.HidePreviewInspector() end
     for _, id in ipairs(ns.order) do
@@ -404,6 +405,7 @@ function ns.HideUnitTooltip()
 end
 
 function ns.UnitOverlay(owner, parent, root, unit, xKey, yKey)
+    root.frameOptionsOwner = owner
     local button = CreateFrame("Button", nil, parent, "SecureUnitButtonTemplate")
     button:SetAllPoints(parent)
     button:SetFrameLevel(parent:GetFrameLevel() + 5)
@@ -413,6 +415,7 @@ function ns.UnitOverlay(owner, parent, root, unit, xKey, yKey)
     button:SetAttribute("unit", unit)
     button:SetAttribute("*type1", "target")
     button:SetAttribute("*type2", "togglemenu")
+    ns.BindFrameOptions(button, owner)
     if owner.defaults.showTooltip ~= nil then
         button:SetScript("OnEnter", function()
             if not ns.AnchorUnitTooltip(owner, button) then return end

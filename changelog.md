@@ -1,3 +1,8 @@
+### 4
+
+* Added middle-click frame settings in Positioning mode
+
+
 ### 3
 
 * Added tooltip options on various frames
