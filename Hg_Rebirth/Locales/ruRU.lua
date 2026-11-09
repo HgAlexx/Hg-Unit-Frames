@@ -100,6 +100,7 @@ L["Left click: open settings."] = "Левый щелчок: открыть на�
 L["Left drag: move minimap icon."] = "Перетаскивание левой кнопкой: переместить значок мини-карты."
 L["Right click: toggle positioning mode."] = "Правый щелчок: переключить режим размещения."
 L["Middle-click a frame or aura to open its settings."] = "Нажмите средней кнопкой мыши на рамку или ауру, чтобы открыть её настройки."
+L["Middle-click to open settings"] = "Нажмите средней кнопкой мыши, чтобы открыть настройки"
 L["Frame settings panel unavailable."] = "Панель настроек рамки недоступна."
 L["Not enough screen space beside this frame for its settings."] = "Рядом с этой рамкой недостаточно места для окна настроек."
 L["Align pet target right of Pet"] = "Выровнять цель питомца справа от питомца"

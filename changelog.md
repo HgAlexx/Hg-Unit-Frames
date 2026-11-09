@@ -1,3 +1,8 @@
+### 5
+
+* Simplify positioning-mode tooltips with "middle-click for settings" hint.
+
+
 ### 4
 
 * Added middle-click frame settings in Positioning mode
