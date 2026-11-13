@@ -26,6 +26,7 @@ local Focus = {
     },
     buttons = {}, boxes = {},
 }
+ns.AddUnitNameSettings(Focus)
 ns.RegisterModule("Focus", Focus)
 
 function Focus:Notice(key, message)
@@ -157,7 +158,7 @@ function Focus:UpdateVitals(kind)
 end
 
 function Focus:UpdateIdentity()
-    ns.HostName(self, UnitName("focus"))
+    ns.HostName(self, ns.UnitFullName(self, "focus"))
     local isPlayer = UnitIsPlayer("focus")
     local className, token = UnitClass("focus")
     local class = not ns.IsSecret(token) and token and RAID_CLASS_COLORS[token]

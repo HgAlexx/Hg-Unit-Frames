@@ -1,3 +1,9 @@
+### 6
+
+* Add player surname (Forever) and realm (Retail) display options
+* Fixed issue with trading when dropping items over frames
+
+
 ### 5
 
 * Simplify positioning-mode tooltips with "middle-click for settings" hint.

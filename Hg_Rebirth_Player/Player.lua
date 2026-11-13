@@ -33,6 +33,7 @@ local Player = {
         resourceColor = ns.rgbRange },
     buttons = {}, boxes = {}, bars = {},
 }
+ns.AddUnitNameSettings(Player)
 ns.RegisterModule("Player", Player)
 
 local resourcePowers = { ROGUE = 4, DRUID = 4, WARLOCK = 7, PALADIN = 9, MONK = 12, MAGE = 16 }
@@ -617,7 +618,7 @@ function Player:ProgressTooltip(button)
 end
 
 function Player:UpdateStatus()
-    local name = UnitName("player")
+    local name = ns.UnitFullName(self, "player")
     local group
     if IsInRaid() then
         for index = 1, GetNumGroupMembers() do

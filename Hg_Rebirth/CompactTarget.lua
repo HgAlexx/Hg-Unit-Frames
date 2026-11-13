@@ -116,7 +116,7 @@ function ns.UpdateCompactTarget(owner, entry, kind)
     end
     entry.cleared = false
     if not kind then
-        entry.name:SetText(UnitName(entry.unit))
+        entry.name:SetText(ns.UnitFullName(owner, entry.unit))
         local r, g, b = ns.UnitNameColor(entry.unit)
         if owner.db.className then
             local player = UnitIsPlayer(entry.unit)

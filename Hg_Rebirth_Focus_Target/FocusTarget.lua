@@ -27,6 +27,7 @@ local FocusTarget = {
     },
     buttons = {},
 }
+ns.AddUnitNameSettings(FocusTarget)
 ns.RegisterModule("FocusTarget", FocusTarget)
 
 function FocusTarget:Notice(key, message)

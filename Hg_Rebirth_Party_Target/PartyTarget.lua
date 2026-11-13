@@ -43,6 +43,7 @@ local PartyTarget = {
         scale = { 0.01, 1.49 }, opacity = { 0, 1 } },
     members = {}, buttons = {},
 }
+ns.AddUnitNameSettings(PartyTarget)
 ns.RegisterModule("PartyTarget", PartyTarget)
 
 function PartyTarget:Notice(key, message)

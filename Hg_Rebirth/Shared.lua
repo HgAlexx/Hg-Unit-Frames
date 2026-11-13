@@ -61,6 +61,33 @@ function ns.HostName(host, name)
     else host.name:SetText(name) end
 end
 
+function ns.UnitFullName(module, unit)
+    local name, extraName = UnitFullName(unit)
+    if ns.IsSecret(name) or not name or ns.IsSecret(extraName) or not extraName or extraName == "" then
+        return name
+    end
+    local isPlayer = UnitIsPlayer(unit)
+    if ns.IsSecret(isPlayer) or not isPlayer then return name end
+    if ns.IsForever then
+        return module.db.showSurname and (name .. " " .. extraName) or name
+    end
+    if ns.IsRetail and module.db.showRealm then
+        local playerRealm = GetRealmName()
+        if module.db.onlyShowRealmIfDifferent and not ns.IsSecret(playerRealm)
+            and extraName == playerRealm then return name end
+        return name .. (module.db.realmFormat == "name" and ("-" .. extraName) or " (*)")
+    end
+    return name
+end
+
+function ns.AddUnitNameSettings(module)
+    module.defaults.showSurname = true
+    module.defaults.showRealm = true
+    module.defaults.onlyShowRealmIfDifferent = true
+    module.defaults.realmFormat = "asterisk"
+    module.ranges.realmFormat = { asterisk = true, name = true }
+end
+
 function ns.CastHostChanged(host)
     local castModule = ns.modules.CastBar
     if castModule and castModule.started then castModule:HostChanged(host) end
@@ -410,7 +437,7 @@ function ns.UnitOverlay(owner, parent, root, unit, xKey, yKey)
     button:SetAllPoints(parent)
     button:SetFrameLevel(parent:GetFrameLevel() + 5)
     button:EnableMouse(true)
-    button:RegisterForClicks("AnyUp", "AnyDown")
+    button:RegisterForClicks("AnyUp")
     button:RegisterForDrag("LeftButton")
     button:SetAttribute("unit", unit)
     button:SetAttribute("*type1", "target")

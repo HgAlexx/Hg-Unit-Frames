@@ -46,6 +46,7 @@ local Chain = {
     },
     buttons = {},
 }
+ns.AddUnitNameSettings(Chain)
 ns.RegisterModule("TargetTarget", Chain)
 
 function Chain:Notice(key, message)
@@ -262,7 +263,7 @@ function Chain:UpdateUnit(entry, kind)
     end
     entry.cleared = false
     if not kind then
-        entry.name:SetText(UnitName(entry.unit))
+        entry.name:SetText(ns.UnitFullName(self, entry.unit))
         local r, g, b = ns.UnitNameColor(entry.unit)
         if self.db.className then
             local player = UnitIsPlayer(entry.unit)
@@ -387,8 +388,8 @@ function Chain:UpdateWarnings()
     local message
     if mode ~= "off" and size ~= "hidden" then
         local target, victim
-        if condition ~= "lost" then target = UnitName("target") end
-        if condition ~= "you" then victim = UnitName("targettarget") end
+        if condition ~= "lost" then target = ns.UnitFullName(self, "target") end
+        if condition ~= "you" then victim = ns.UnitFullName(self, "targettarget") end
         if ns.IsSecret(target) or ns.IsSecret(victim) then
             self:Notice("warnings", "Restricted warning inputs: unavailable target-chain warnings are suppressed.")
             return

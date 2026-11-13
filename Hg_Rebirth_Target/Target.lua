@@ -29,6 +29,7 @@ local Target = {
     },
     buttons = {}, boxes = {},
 }
+ns.AddUnitNameSettings(Target)
 ns.RegisterModule("Target", Target)
 
 function Target:Notice(key, message)
@@ -214,7 +215,7 @@ function Target:UpdateVitals(kind)
 end
 
 function Target:UpdateIdentity()
-    ns.HostName(self, UnitName("target"))
+    ns.HostName(self, ns.UnitFullName(self, "target"))
     local isPlayer = UnitIsPlayer("target")
     local className, token = UnitClass("target")
     local class = not ns.IsSecret(token) and token and RAID_CLASS_COLORS[token]

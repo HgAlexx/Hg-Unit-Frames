@@ -18,6 +18,11 @@ local stickyPanels = {
     ["Target Target"] = "TargetTarget", ["Focus"] = "Focus", ["Focus Target"] = "FocusTarget",
     ["Party"] = "Party", ["Party Target"] = "PartyTarget", ["Party Pet"] = "PartyPet",
 }
+local playerNamePanels = {
+    ["Player"] = "Player", ["Player Pet"] = "PlayerPet", ["Target"] = "Target",
+    ["Target Target"] = "TargetTarget", ["Focus"] = "Focus", ["Focus Target"] = "FocusTarget",
+    ["Party"] = "Party", ["Party Target"] = "PartyTarget", ["Party Pet"] = "PartyPet",
+}
 local auraPanels = { ["Player Aura"] = "PlayerAura", ["Target Aura"] = "TargetAura", ["Focus Aura"] = "FocusAura" }
 
 function ns.HideFrameOptions()
@@ -99,6 +104,26 @@ function ns.Panel(title, subtitle, parentCategory, build)
         local initialize = build
         build = nil
         initialize(content)
+        local nameModuleId = playerNamePanels[key]
+        local nameModule = nameModuleId and ns.modules[nameModuleId]
+        if nameModule then
+            ns.Section(content, "Player names")
+            if ns.IsForever then
+                ns.Check(content, nameModule, "showSurname", "Show surname")
+            elseif ns.IsRetail then
+                ns.Check(content, nameModule, "showRealm", "Show realm")
+                ns.SubOptions(content, function() return nameModule.db.showRealm end, function()
+                    ns.Check(content, nameModule, "onlyShowRealmIfDifferent",
+                        "Only show realm if different from your realm")
+                    ns.Select(content, "Realm name format", function()
+                        return { { text = "Show asterisk", value = "asterisk" },
+                            { text = "Show name", value = "name" } }
+                    end, function() return nameModule.db.realmFormat end, function(value)
+                        ns.Set(nameModule, "realmFormat", value)
+                    end)
+                end)
+            end
+        end
         local module = ns.modules[stickyPanels[key]]
         if module and module.defaults.showTooltip ~= nil then ns.TooltipOptions(content, module) end
         if module and ns.StickyOptions then ns.StickyOptions(content, module) end

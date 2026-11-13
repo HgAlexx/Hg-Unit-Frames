@@ -34,6 +34,7 @@ local Party = {
     },
     members = {}, buttons = {}, boxes = {},
 }
+ns.AddUnitNameSettings(Party)
 ns.RegisterModule("Party", Party)
 
 function Party:Notice(key, message)
@@ -405,7 +406,7 @@ end
 function Party:UpdateIdentity(member, skipPortrait)
     local unit = member.unit
     ns.UpdateRaidMarker(self, member.marker, unit)
-    ns.HostName(member, UnitName(unit))
+    ns.HostName(member, ns.UnitFullName(self, unit))
     local _, token = UnitClass(unit)
     local isPlayer = UnitIsPlayer(unit)
     local coords = not ns.IsSecret(token) and token and CLASS_ICON_TCOORDS[token]

@@ -47,6 +47,7 @@ local PartyPet = {
     },
     members = {}, buttons = {},
 }
+ns.AddUnitNameSettings(PartyPet)
 ns.RegisterModule("PartyPet", PartyPet)
 
 function PartyPet:Notice(key, message)
@@ -243,7 +244,7 @@ function PartyPet:UpdateMember(member, kind)
         end
     end
     member.cleared = false
-    if not kind then member.name:SetText(UnitName(member.unit)) end
+    if not kind then member.name:SetText(ns.UnitFullName(self, member.unit)) end
     local dead, ghost = UnitIsDead(member.unit), UnitIsGhost(member.unit)
     local zero = not ns.IsSecret(dead) and not ns.IsSecret(ghost) and (dead or ghost)
     if ns.IsSecret(dead) or ns.IsSecret(ghost) then

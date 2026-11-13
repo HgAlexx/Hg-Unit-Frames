@@ -24,6 +24,17 @@ local function commonSetting(parent, key, text)
     end)
 end
 
+local function commonChoiceSetting(parent, key, choices)
+    for _, choice in ipairs(choices) do
+        ns.Button(parent, choice.text, function()
+            for _, id in ipairs(ns.order) do
+                local module = ns.modules[id]
+                if module.defaults[key] ~= nil and not ns.Set(module, key, choice.value) then return end
+            end
+        end)
+    end
+end
+
 function ns.BuildOptions()
     local core = ns.modules.Core
     local _, category = ns.Panel(ns.title,
@@ -50,7 +61,7 @@ function ns.BuildOptions()
         end)
         ns.Section(content, "Character settings and global snapshot")
         local selected
-        ns.Select(content, "Copy from character", function()
+            ns.Select(content, "Copy from character", function()
             local choices = {}
             for _, key in ipairs(ns.Characters()) do
                 if key ~= ns.characterKey then choices[#choices + 1] = { text = key, value = key, raw = true } end
@@ -101,6 +112,19 @@ function ns.BuildOptions()
             { "castableBuffs", "Only show castable buffs" }, { "curableDebuffs", "Only show curable debuffs" },
             { "ownDebuffs", "Only show own debuffs on hostile targets" }, { "auraTimers", "Show aura native cooldown" },
         }) do commonSetting(common, option[1], option[2]) end
+        ns.Section(common, "Player names")
+        if ns.IsForever then
+            commonSetting(common, "showSurname", "Show surname")
+        elseif ns.IsRetail then
+            commonSetting(common, "showRealm", "Show realm")
+            commonSetting(common, "onlyShowRealmIfDifferent",
+                "Only show realm if different from your realm")
+            ns.Section(common, "Realm name format")
+            commonChoiceSetting(common, "realmFormat", {
+                { text = "Show asterisk", value = "asterisk" },
+                { text = "Show name", value = "name" },
+            })
+        end
     end)
     for _, id in ipairs(ns.order) do
         local module = ns.modules[id]

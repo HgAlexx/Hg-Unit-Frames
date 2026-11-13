@@ -3,7 +3,6 @@ local UnitClass = UnitClass
 local UnitExists = UnitExists
 local UnitIsFriend = UnitIsFriend
 local UnitIsPlayer = UnitIsPlayer
-local UnitName = UnitName
 local UnitPowerType = UnitPowerType
 local Pet = {
     savedVariable = "Hg_Rebirth_Player_Pet_Options",
@@ -48,6 +47,7 @@ local Pet = {
     },
     boxes = {}, buttons = {}, containers = {},
 }
+ns.AddUnitNameSettings(Pet)
 ns.RegisterModule("PlayerPet", Pet)
 
 function Pet:Notice(key, message)
@@ -294,7 +294,7 @@ function Pet:UpdatePet(kind)
     end
     if not UnitExists("pet") then return end
     if not kind then
-        self.name:SetText(UnitName("pet"))
+        self.name:SetText(ns.UnitFullName(self, "pet"))
         self.name:SetTextColor(1, 1, 0)
         if self.db.petClassName then
             local _, token = UnitClass("pet")
@@ -369,7 +369,7 @@ function Pet:UpdateTarget(kind)
     if not self.db.showTarget or not UnitExists("pettarget") then return end
     local target = self.target
     if not kind then
-        target.name:SetText(UnitName("pettarget"))
+        target.name:SetText(ns.UnitFullName(self, "pettarget"))
         local class, r, g, b
         if self.db.className then
             local isPlayer = UnitIsPlayer("pettarget")
