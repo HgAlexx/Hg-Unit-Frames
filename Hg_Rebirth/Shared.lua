@@ -714,7 +714,8 @@ end
 function ns.UpdateUnitPortrait(owner, unit)
     if not owner.db.portrait then return end
     local visible = UnitIsVisible(unit)
-    local model = owner.db.portrait3D and not ns.IsSecret(visible) and visible
+    local secretIdentity = C_Secrets.ShouldUnitIdentityBeSecret(unit)
+    local model = owner.db.portrait3D and not secretIdentity and not ns.IsSecret(visible) and visible
     owner.model:SetShown(model)
     owner.portrait:SetShown(not model)
     if model then owner.model:SetUnit(unit); owner.model:SetPortraitZoom(1)

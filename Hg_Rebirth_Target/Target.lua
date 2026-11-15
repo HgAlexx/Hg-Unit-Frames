@@ -284,7 +284,7 @@ function Target:UpdateLevel()
         self.level:SetFormattedText("%.0f", level)
         self.level:SetTextColor(1, 1, 1)
     else
-        local color = GetQuestDifficultyColor(level)
+        local color = GetDifficultyColor(C_PlayerInfo.GetContentDifficultyCreatureForPlayer("target"))
         self.level:SetTextColor(color.r, color.g, color.b)
         if not self.db.numericThreat then self.classification:SetTextColor(color.r, color.g, color.b) end
         local suffix = ""

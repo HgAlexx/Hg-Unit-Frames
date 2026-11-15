@@ -1,3 +1,9 @@
+### 7
+
+* Fixed issue with 3D portraits in restricted conditions
+* Fixed target and focus level color
+
+
 ### 6
 
 * Add player surname (Forever) and realm (Retail) display options
