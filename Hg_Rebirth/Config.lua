@@ -61,7 +61,7 @@ function ns.BuildOptions()
         end)
         ns.Section(content, "Character settings and global snapshot")
         local selected
-            ns.Select(content, "Copy from character", function()
+        ns.Select(content, "Copy from character", function()
             local choices = {}
             for _, key in ipairs(ns.Characters()) do
                 if key ~= ns.characterKey then choices[#choices + 1] = { text = key, value = key, raw = true } end

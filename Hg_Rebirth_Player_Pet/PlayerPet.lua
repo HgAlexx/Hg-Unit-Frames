@@ -381,7 +381,7 @@ function Pet:UpdateTarget(kind)
         if class then r, g, b = class.r, class.g, class.b
         else r, g, b = self:TargetNameColor() end
         if not r then
-            r, g, b = 1, 1, 1
+            r, g, b = ns.DefaultUnitNameColor()
             self:Notice("reaction", "Pet-target reaction coloring unavailable while identity data is restricted.")
         end
         target.name:SetTextColor(r, g, b)

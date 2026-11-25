@@ -478,6 +478,10 @@ function ns.UnitBar(parent, width)
     return { frame = frame, background = background, text = text }
 end
 
+function ns.DefaultUnitNameColor()
+    return NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b
+end
+
 function ns.UnitNameColor(unit)
     local controlled, visible = UnitPlayerControlled(unit), UnitIsVisible(unit)
     if ns.IsSecret(controlled) or ns.IsSecret(visible) then return end
@@ -490,7 +494,7 @@ function ns.UnitNameColor(unit)
             if ns.IsSecret(reaction) then return end
             local color = reaction and FACTION_BAR_COLORS[reaction]
             if color then return color.r, color.g, color.b end
-            return 0.5, 0.5, 1
+            return
         end
     end
     local hostile, attackable = UnitCanAttack(unit, "player"), UnitCanAttack("player", unit)

@@ -7,7 +7,7 @@ local Buff = {
         groupSpacingVertical = 3,
         buffPerRow = 20, maxNumberOfRow = 2, anchorLocation = 1,
         auraTimers = true, cooldownScale = 0.7, durationText = false, secondsMode = 2,
-        castableBuffs = false, curableDebuffs = false, ownDebuffs = false,
+        castableBuffs = false, curableDebuffs = false, ownDebuffs = false, invertAuraOrder = true,
         showAuraBackground = false, auraBackgroundAlpha = 1,
     },
     ranges = {

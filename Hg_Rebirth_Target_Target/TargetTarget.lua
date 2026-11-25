@@ -277,8 +277,13 @@ function Chain:UpdateUnit(entry, kind)
             end
         end
         if not r then
-            r, g, b = 1, 1, 1
-            self:Notice("identity", "Restricted chained-unit identity: name coloring is neutral.")
+            local reaction = UnitReaction(entry.unit, "player")
+            local color = not ns.IsSecret(reaction) and reaction and FACTION_BAR_COLORS[reaction]
+            if color then r, g, b = color.r, color.g, color.b end
+        end
+        if not r then
+            r, g, b = ns.DefaultUnitNameColor()
+            self:Notice("identity", "Unavailable chained-unit identity: using the default name color.")
         end
         entry.name:SetTextColor(r, g, b)
     end

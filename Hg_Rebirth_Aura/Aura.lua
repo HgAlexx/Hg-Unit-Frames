@@ -222,7 +222,7 @@ function Engine:Preview()
     local weapons = db.weaponBuff and math.min(2, count) or 0
     local right, up = db.anchorLocation % 2 == 0, db.anchorLocation >= 3
     local point = up and (right and "BOTTOMRIGHT" or "BOTTOMLEFT") or (right and "TOPRIGHT" or "TOPLEFT")
-    local helpfulRows = db.maxNumberOfRow
+    local groupRows = db.maxNumberOfRow
     local height = 30 + (db.durationText and 15 or 0)
     local padding = db.showAuraBackground and 5 or 0
     local width = math.max(1, db.buffPerRow * 30 + (db.buffPerRow - 1) * db.spacingHorizontal)
@@ -244,8 +244,8 @@ function Engine:Preview()
         self.preview.buffBackground = ns.AuraPanel(self.preview, ns.backdrop)
         self.preview.debuffBackground = ns.AuraPanel(self.preview, ns.backdrop)
     end
-    positionPreviewPanel(self.preview.buffBackground, 0)
-    positionPreviewPanel(self.preview.debuffBackground, helpfulRows)
+    positionPreviewPanel(self.preview.buffBackground, db.invertAuraOrder and groupRows or 0)
+    positionPreviewPanel(self.preview.debuffBackground, db.invertAuraOrder and 0 or groupRows)
     local cooldownStart = db.auraTimers and GetTime() - 15
     for i = 1, count * 2 do
         local icon = self.preview.icons[i]
@@ -268,11 +268,12 @@ function Engine:Preview()
         end
         local harmful = i > count
         local index = harmful and i - count - 1 or i - 1
-        local row = math.floor(index / db.buffPerRow) + (harmful and helpfulRows or 0)
+        local second = harmful ~= (db.invertAuraOrder == true)
+        local row = math.floor(index / db.buffPerRow) + (second and groupRows or 0)
         icon:ClearAllPoints()
         icon:SetPoint(point, self.preview, point, (right and -1 or 1) * ((index % db.buffPerRow) * (30 + db.spacingHorizontal)),
             (up and 1 or -1) * (row * (height + db.spacingVertical)
-                + (harmful and (db.groupSpacingVertical - db.spacingVertical + 2 * padding) or 0))
+                + (second and (db.groupSpacingVertical - db.spacingVertical + 2 * padding) or 0))
                 + (up and db.durationText and 15 or 0))
         icon.texture:SetTexture(harmful and "Interface\\Icons\\Spell_Shadow_ShadowWordPain"
             or i <= weapons and "Interface\\Icons\\INV_Sword_04" or "Interface\\Icons\\Spell_Holy_WordFortitude")
@@ -294,12 +295,14 @@ end
 function Engine:LayoutContainers(entry, point, right, up, weapons)
     local db = self.db
     local container = entry.container
-    container:ClearAllPoints()
-    container:SetPoint(point, self.frame, point, 0, up and db.durationText and 15 or 0)
     local debuffContainer = entry.debuffContainer
+    container:ClearAllPoints()
     debuffContainer:ClearAllPoints()
+    local first = db.invertAuraOrder and debuffContainer or container
+    local second = db.invertAuraOrder and container or debuffContainer
+    first:SetPoint(point, self.frame, point, 0, up and db.durationText and 15 or 0)
     local containerEdge = (up and "TOP" or "BOTTOM") .. (right and "RIGHT" or "LEFT")
-    debuffContainer:SetPoint(point, container, containerEdge, 0,
+    second:SetPoint(point, first, containerEdge, 0,
         (up and 1 or -1) * (db.groupSpacingVertical + (db.showAuraBackground and 10 or 0)))
     container:SetFlowLayoutPadding(0, 0, 0, 0)
     debuffContainer:SetFlowLayoutPadding(0, 0, 0, 0)

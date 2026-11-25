@@ -652,7 +652,8 @@ function Player:UpdateStatus()
     self.role:SetShown(roleCoordinates ~= nil)
     if roleCoordinates then self.role:SetTexCoord(unpack(roleCoordinates)) end
     local flagged, sanctuary = UnitIsPVP("player"), UnitIsPVPSanctuary("player")
-    if ns.IsSecret(flagged) or ns.IsSecret(sanctuary) then
+    local restrictedPVP = ns.IsSecret(flagged) or ns.IsSecret(sanctuary)
+    if restrictedPVP then
         self:Notice("pvp", "PvP status unavailable while identity data is restricted.")
         flagged = false
     else flagged = flagged and not sanctuary end
@@ -662,7 +663,9 @@ function Player:UpdateStatus()
         (UnitIsPVPFreeForAll("player") and "FFA" or faction or "FFA")) end
     if self.db.className then
         local color = RAID_CLASS_COLORS[self.class]
-        if color then self.name:SetTextColor(color.r, color.g, color.b) end
+        if color then self.name:SetTextColor(color.r, color.g, color.b)
+        else self.name:SetTextColor(ns.DefaultUnitNameColor()) end
+    elseif restrictedPVP then self.name:SetTextColor(ns.DefaultUnitNameColor())
     elseif flagged then self.name:SetTextColor(0, 1, 0)
     else self.name:SetTextColor(0.5, 0.5, 1) end
     self:UpdateThreat()

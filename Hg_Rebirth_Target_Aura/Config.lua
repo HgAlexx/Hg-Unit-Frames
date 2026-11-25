@@ -7,6 +7,7 @@ function Buff:BuildOptions(category)
         { "enabled", "Show target auras" }, { "durationText", "Show original text timers" },
         { "auraTimers", "Show aura native cooldown" },
         { "showAuraBackground", "Show aura backgrounds" },
+        { "invertAuraOrder", "Invert buff and debuff order" },
         { "castableBuffs", "Only show castable buffs" }, { "curableDebuffs", "Only show curable debuffs" },
         { "ownDebuffs", "Only show own debuffs on hostile targets" },
     },

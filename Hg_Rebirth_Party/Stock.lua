@@ -7,9 +7,17 @@ function Party:StockActive()
 end
 
 function Party:SuppressStockFrame(frame, data)
+    -- Leave a property alone until we have a readable value to restore.
     local alpha = frame:GetAlpha()
-    if ns.IsSecret(alpha) or alpha ~= 0 then frame:SetAlpha(0) end
-    if data.mouseSupported and frame:IsMouseEnabled() then frame:EnableMouse(false) end
+    local alphaSecret = ns.IsSecret(alpha)
+    if not alphaSecret and data.alpha == nil then data.alpha = alpha end
+    if data.alpha ~= nil and (alphaSecret or alpha ~= 0) then frame:SetAlpha(0) end
+    if data.mouseSupported then
+        local mouse = frame:IsMouseEnabled()
+        local mouseSecret = ns.IsSecret(mouse)
+        if not mouseSecret and data.mouse == nil then data.mouse = mouse end
+        if data.mouse ~= nil and (mouseSecret or mouse) then frame:EnableMouse(false) end
+    end
 end
 
 function Party:ReapplyStockFrame(frame, data)
@@ -31,13 +39,13 @@ function Party:TrackStock(frame)
     self.stockFrames[frame] = data
     hooksecurefunc(frame, "SetAlpha", function(_, alpha)
         if self.applyingStock or not data.owned then return end
-        data.alpha = alpha
+        if not ns.IsSecret(alpha) then data.alpha = alpha end
         self:ReapplyStockFrame(frame, data)
     end)
     if data.mouseSupported then
         hooksecurefunc(frame, "EnableMouse", function(_, enabled)
             if self.applyingStock or not data.owned then return end
-            data.mouse = enabled
+            if not ns.IsSecret(enabled) then data.mouse = enabled end
             self:ReapplyStockFrame(frame, data)
         end)
     end
@@ -119,16 +127,13 @@ function Party:ApplyStock()
     self.applyingStock = true
     for frame, data in pairs(self.stockFrames or {}) do
         if active then
-            if not data.owned then
-                data.alpha = frame:GetAlpha()
-                if data.mouseSupported then data.mouse = frame:IsMouseEnabled() end
-            end
             data.owned = true
             self:SuppressStockFrame(frame, data)
         elseif data.owned then
             data.owned = false
-            frame:SetAlpha(data.alpha)
-            if data.mouseSupported then frame:EnableMouse(data.mouse) end
+            if data.alpha ~= nil then frame:SetAlpha(data.alpha) end
+            if data.mouse ~= nil then frame:EnableMouse(data.mouse) end
+            data.alpha, data.mouse = nil, nil
         end
     end
     self.applyingStock = false

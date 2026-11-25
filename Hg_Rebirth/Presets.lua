@@ -119,6 +119,7 @@ ns.presets = {
         },
         TargetAura = {
             ownDebuffs = false, -- Only show own debuffs on hostile targets
+            invertAuraOrder = true, -- Invert buff and debuff order
             showAuraBackground = true, -- Show aura backgrounds
             auraBackgroundAlpha = 1, -- Aura background opacity (%)
             anchorLocation = 1, -- Aura anchor (1 = Bottom left, 2 = Bottom right, 3 = Top left, 4 = Top right)
@@ -533,6 +534,7 @@ ns.presets = {
             },
             TargetAura = {
                 ownDebuffs = false, -- Only show own debuffs on hostile targets
+                invertAuraOrder = true, -- Invert buff and debuff order
                 showAuraBackground = false, -- Show aura backgrounds
                 auraBackgroundAlpha = 1, -- Aura background opacity (%)
                 anchorLocation = 1, -- Aura anchor (1 = Bottom left, 2 = Bottom right, 3 = Top left, 4 = Top right)

@@ -223,8 +223,8 @@ function Target:UpdateIdentity()
     if self.db.className and not ns.IsSecret(isPlayer) and isPlayer and class then r, g, b = class.r, class.g, class.b
     else r, g, b = ns.UnitNameColor("target") end
     if not r then
-        r, g, b = 1, 1, 1
-        self:Notice("identity", "Restricted target identity: unavailable indicators are hidden; name coloring is neutral.")
+        r, g, b = ns.DefaultUnitNameColor()
+        self:Notice("identity", "Unavailable target identity: using the default name color.")
     end
     self.name:SetTextColor(r, g, b)
     local iconToken = self.db.classIcon and ns.ClassIconToken("target", isPlayer, token)

@@ -431,8 +431,8 @@ function Party:UpdateIdentity(member, skipPortrait)
         end
     end
     if not r then
-        r, g, b = 1, 1, 1
-        self:Notice("identity", "Restricted party identity: unavailable indicators are hidden; name coloring is neutral.")
+        r, g, b = ns.DefaultUnitNameColor()
+        self:Notice("identity", "Unavailable party identity: using the default name color.")
     end
     member.name:SetTextColor(r, g, b)
     local pvp, ffa, sanctuary = UnitIsPVP(unit), UnitIsPVPFreeForAll(unit), UnitIsPVPSanctuary(unit)

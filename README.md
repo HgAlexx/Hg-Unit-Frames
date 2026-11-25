@@ -34,7 +34,7 @@ Please also note that most localizations have been google-translated and might n
 - **Player Aura**: Configurable player buffs, debuffs and weapon enchants.
 - **Player Pet**: Your pet's health and power, with an optional pet-target frame.
 - **Target**: Your selected target's vitals and identity, with classic and alternative layouts.
-- **Target Aura**: Configurable buffs and debuffs around the target frame.
+- **Target Aura**: Configurable buffs and debuffs around the target frame, including an option to invert their order.
 - **Target of Target**: Compact displays for your target's target and the next target in the chain.
 - **Focus**: A dedicated frame for keeping track of your focus.
 - **Focus Aura**: Configurable buffs and debuffs around the focus frame.
@@ -52,6 +52,6 @@ All options are available under **Settings > AddOns > Hg Unit Frames**.
 
 Open configuration with `/hguf`, the minimap button, or the AddOn compartment entry. Each display has its own settings panel, while common settings and presets make it easy to configure the whole interface together.
 
-Use **Positioning mode** to arrange frames and preview their layouts without needing a target, pet or group. In this mode, the tooltip hover each element will list which settings can affect it. Use **middle-click** over a frame to **open its settings**.
+Use **Positioning mode** to arrange frames and preview their layouts without needing a target, pet or group. In this mode, use **middle-click** over a frame to **open its settings**.
 
 You can toggle in and out of Positioning mode using right-click on the minimap icon.

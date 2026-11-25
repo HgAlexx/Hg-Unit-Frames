@@ -129,8 +129,13 @@ function ns.UpdateCompactTarget(owner, entry, kind)
             end
         end
         if not r then
-            r, g, b = 1, 1, 1
-            owner:Notice("name", "Restricted " .. entry.unit .. " identity: name coloring is neutral.")
+            local reaction = UnitReaction(entry.unit, "player")
+            local color = not ns.IsSecret(reaction) and reaction and FACTION_BAR_COLORS[reaction]
+            if color then r, g, b = color.r, color.g, color.b end
+        end
+        if not r then
+            r, g, b = ns.DefaultUnitNameColor()
+            owner:Notice("name", "Unavailable " .. entry.unit .. " identity: using the default name color.")
         end
         entry.name:SetTextColor(r, g, b)
     end

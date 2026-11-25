@@ -1,3 +1,9 @@
+### 8
+
+* Inverted Buff and Debuff order of Target (with new related settings)
+* Improved name color fallback when data is restricted
+
+
 ### 7
 
 * Fixed issue with 3D portraits in restricted conditions
